@@ -21,7 +21,13 @@ commit:
 	@read -p "Entrez le message de commit : " msg; \
 	echo "Préparation du commit..."; \
 	git add .; \
-	git commit -m "$$msg"
+	if [ -n "$$(git status --porcelain)" ]; then \
+		git commit -m "$$msg"; \
+	else \
+		echo "Aucun changement à committer dans le dépôt principal."; \
+	fi; \
+	git submodule foreach --recursive 'if [ -n "$$(git status --porcelain)" ]; then git add .; git commit -m "$$msg"; fi'
+
 
 # Pousse les changements du dépôt principal et de tous les sous-modules
 push:
