@@ -10,13 +10,13 @@ update:
 
 commit:
 	@read -p "Entrez le message de commit pour le dépôt principal: " msg; \
-	git add .; \
-	git commit -m "$$msg"; \
 	git submodule foreach --recursive 'if [ -n "$$(git status --porcelain)" ]; then \
 		read -p "Entrez le message de commit pour $$path: " submsg; \
 		git add .; \
 		git commit -m "$$submsg"; \
-	fi'
+	fi'; \
+	git add .; \
+	git commit -m "$$msg"
 
 push:
 	@echo "Push des changements..."
