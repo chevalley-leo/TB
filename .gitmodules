@@ -1,0 +1,6 @@
+[submodule "repo1"]
+	path = repo1
+	url = https://github.com/chevalley-leo/xArm-Python-SDK.git
+[submodule "repo2"]
+	path = repo2
+	url = https://github.com/chevalley-leo/TB_Chevalley.git
