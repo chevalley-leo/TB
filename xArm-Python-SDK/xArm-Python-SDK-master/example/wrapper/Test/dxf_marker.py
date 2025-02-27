@@ -12,11 +12,14 @@ arm.clean_error()
 arm.motion_enable(True)
 arm.set_mode(0)
 arm.set_state(0)
+arm.set_tcp_jerk(100000)
+arm.set_tcp_jerk(500)
+
 time.sleep(1)
 
 # Paramètres du robot
-TCP_SPEED = 300
-TCP_ACC = 2000
+TCP_SPEED = 1000
+TCP_ACC = 50000
 Z_HEIGHT = 100  # Hauteur de sécurité
 
 # Position de base
@@ -24,7 +27,7 @@ BASE_X_OFFSET = 200
 BASE_Y_OFFSET = 600
 
 # Charger le fichier DXF
-dxf_file = "coeur.dxf"  # Remplace par ton fichier
+dxf_file = "forme.dxf"  # Remplace par ton fichier
 doc = ezdxf.readfile(dxf_file)
 msp = doc.modelspace()
 
@@ -32,7 +35,7 @@ msp = doc.modelspace()
 scale_factor = 1.0
 
 # Déplacer en hauteur de sécurité avant de commencer
-arm.set_position(BASE_X_OFFSET, BASE_Y_OFFSET, Z_HEIGHT+10, 0.0, 90.0, 90.0, speed=TCP_SPEED, wait=True)
+arm.set_position(BASE_X_OFFSET, BASE_Y_OFFSET, Z_HEIGHT+10, 0.0, 90.0, 90.0, speed=TCP_SPEED, mvacc=TCP_ACC, wait=False)
 
 def apply_offset(x, y):
     """Applique l'offset aux coordonnées x et y."""
@@ -40,7 +43,8 @@ def apply_offset(x, y):
 
 def move_to_position(x, y):
     """Déplace le robot à la position spécifiée."""
-    arm.set_position(x, y, Z_HEIGHT, 0.0, 90.0, 90.0, speed=TCP_SPEED, radius=0, wait=False)
+    arm.set_position(x, y, Z_HEIGHT, 0.0, 90.0, 90.0, speed=TCP_SPEED, mvacc=TCP_ACC, radius=0, wait=False)
+
 
 def process_lwpolyline(polyline):
     """Reconstruit correctement une LWPOLYLINE avec segments droits et arcs."""

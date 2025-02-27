@@ -26,6 +26,8 @@ arm = XArmAPI('192.168.1.215', baud_checkset=False)
 arm.motion_enable(enable=True)
 arm.set_mode(0)
 arm.set_state(state=0)
+arm.set_tcp_jerk(10000)
+arm.set_joint_jerk(500)
 
 #arm.move_gohome(wait=True)
 
@@ -35,9 +37,9 @@ arm.set_state(state=0)
 print(arm.get_position(), arm.get_position(is_radian=True))
 
 
-#arm.set_position(600, 200, 140, 0.0, 90.0, 0.0, speed=100, mvacc=1000, wait=True)
+arm.set_position(600, 200, 140, 0.0, 90.0, 0.0, speed=500, mvacc=50000, radius=1)
 
-arm.set_position(200, 600, 140, 0.0, 90.0, 90.0, speed=100, mvacc=1000, wait=True)
+arm.set_position(200, 600, 140, 0.0, 90.0, 90.0, speed=500, mvacc=50000,radius=1)
 
 #arm.set_position(600, 200, 100, 0.0, 90.0, 0.0, speed=100, mvacc=1000, wait=True)
 
