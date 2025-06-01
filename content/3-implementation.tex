@@ -1,15 +1,49 @@
 \chapter{Implémentation}
 
-
-\index{expérience}
-Vous devez décrire le déroulement de vos expériences, en précisant le cadre dans lequel elles ont été menées ainsi que les outils et technologies utilisés. Ce chapitre doit permettre au lecteur de comprendre non seulement ce que vous avez fait, mais aussi pourquoi vous avez opté pour cette approche.
-
-Exposez de manière structurée la conception globale de votre projet en illustrant vos explications par des schémas, des diagrammes ou des modèles visuels -- tels que des diagrammes de classes, de flux ou des organigrammes -- afin de clarifier votre démarche.
-
-Que ce soit pour une architecture logicielle, une conception électronique ou une analyse de données, chaque aspect de votre travail doit être présenté de façon logique et détaillée. Il est essentiel de justifier vos choix en soulignant leur pertinence au regard des objectifs fixés et de la problématique posée.
-
-Vous êtes libre de structurer ce chapitre en plusieurs sections distinctes, en fonction de la nature de votre projet. L'objectif est d'offrir au lecteur une vision claire de la manière dont vous avez développé votre travail, en mettant en lumière non seulement les actions entreprises, mais également les décisions qui les ont motivées. Votre implémentation doit refléter une réflexion méthodique et rigoureuse, guidée par la problématique et les objectifs initiaux.
-
 \section{Implémentation des différents éléments}
 
-La maquette finale de la graveuse laser possède plusieurs éléments qui lui permettent de fonctionner. Ces éléments sont :
+La maquette finale de la graveuse laser intelligente est constituée de plusieurs éléments matériels et logiciels qui interagissent pour assurer son bon fonctionnement. Ces éléments principaux sont :
+
+\begin{itemize}
+    \item \textbf{Bras robot Ufactory Xarm6}
+    \item \textbf{Graveuse laser Creality Falcon}
+    \item \textbf{Écran tactile ED101}
+    \item \textbf{Caméra Intel D435}
+\end{itemize}
+
+\subsection{Bras robot Ufactory Xarm6}
+
+Le bras robot Ufactory Xarm6 est un bras robotique collaboratif à 6 degrés de liberté, offrant une bonne précision et une flexibilité importante pour la manipulation dans l’espace de travail. Le contrôle du bras est réalisé principalement via le SDK Python fourni par Ufactory, ainsi que par l’interface graphique AICA Studio qui permet la programmation par blocs fonctionnels.
+
+La programmation via AICA studio permet un contrôle fin de la cinématique, notamment la gestion des accélérations, vitesses, et positions intermédiaires. Le logiciel offre plusieurs possibilités de contrôle. La communication avec le bras s’effectue par Ethernet.
+
+\subsection{Graveuse laser Creality Falcon}
+
+La graveuse laser Creality Falcon est commandée via des fichiers G-code, un langage standard dans le domaine des machines-outils à commande numérique. Les motifs à graver, initialement créés au format DXF (fichier de dessin vectoriel), sont convertis en fichiers G-code via un script développé spécialement dans le cadre de ce projet.
+
+Ce script réalise les étapes suivantes :
+\begin{itemize}
+    \item Lecture et analyse des contours du fichier DXF.
+    \item Génération de trajectoires compatibles avec le protocole G-code.
+    \item Communication entré le logiciel et la graveuse laser.
+\end{itemize}
+
+Le fichier G-code généré est ensuite envoyé à la Creality Falcon qui réalise la gravure. Une synchronisation précise avec le bras robot est nécessaire pour assurer que le laser ne s’active que lorsque le bras est en position correcte.
+
+\subsection{Écran tactile ED101}
+
+L’écran tactile ED101 permet de choisir ce que la graveuse va dessiner. Via une interface graphique, il est possible de dessiner à la main, avec des formes prédéfinies ou avec du texte dans la zone de gravure.
+
+Cette interface est spécialement conçue pour une utilisation en tant que démonstrateur devant du public.
+
+\subsection{Caméra Intel D435}
+
+La caméra Intel D435 est utilisée pour la détection en 3D des pièces à graver dans l’espace de travail. Grâce à sa capacité à fournir des données de profondeur en temps réel, elle permet :
+\begin{itemize}
+    \item De localiser précisément les pièces posées sur la zone de travail.
+    \item D’adapter la trajectoire du bras robot en fonction de la position exacte des pièces détectées.
+\end{itemize}
+
+L’intégration de la caméra dans le système est réalisée via un bloc fonctionnel personnalisé développé dans AICA Studio, utilisant les données 3D captées pour prendre des décisions en temps réel. Le fonctionnement détaillé de ce bloc sera présenté dans le \textbf{chapitre \ref{chap:blocs_fonctionnels}}.
+
+
