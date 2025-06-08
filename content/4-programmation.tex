@@ -1,0 +1,113 @@
+\chapter{Programmation}
+\label{chap:programmation}
+
+La plupart des scripts étant conçu pour fonctionner dans AICA Studio et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que telle.
+
+Ainsi, la plupart des programmes et blocs fonctionnels ont d'abord été développés et testés en Python de façon indépendante, sans intégration directe à \gls{ros2}. Cette approche a permis de valider les algorithmes et le fonctionnement général dans un environnement plus simple et maîtrisé.
+
+Dans un second temps, quand le développement a été finalisé, l'intégration dans l'environnement AICA Studio a été réalisée. Cette étape a consisté à adapter les scripts pour qu'ils fonctionnent avec l'architecture \gls{ros2} imposée par AICA Studio, en veillant à la compatibilité des communications et à l'intégration des blocs fonctionnels dans le système global.
+
+Cette démarche a permis de gagner du temps sur le développement initial, tout en assurant une intégration robuste et conforme aux exigences de la plateforme finale.
+
+\section{Ecran tactile}
+L'écran tactile ED101 est le seul élément de la maquette qui n'est pas directement lié au logiciel AICA Studio. Un script Python a étét développé avec la bibliothèque \texttt{tkinter} pour permettre à l'utilisateur de dessiner et d'envoyer directement le fichier DXF correspondant au PC principal. Un autre script Python est utilisé sur le PC principal pour récupérer le fichier DXF envoyé par l'écran tactile.
+
+Script de récupération du fichier DXF sur le PC principal :
+
+\inputminted{python}{assets/code/tcp_ecoute.py}
+
+On constate la simplicité de ce script grâce a l'utilisation de la bibliothèque \texttt{socket} de Python.
+
+\section{Graveuse laser}
+Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel AICA Studio, un bloc fonctionnel a été développé afin de :
+\begin{itemize}
+    \item Charger un fichier DXF.
+    \item Convertir le fichier DXF en G-code.
+    \item Envoyer le G-code à la graveuse laser.
+    \item Gérer la synchronisation entre le bras robot et la graveuse laser.
+\end{itemize}
+
+Le bloc fonctionnel offre une certaine liberté dans le choix du nom du fichier DXF. Cependant, dans le cadre du projet, le nom de fichier est toujours le même. Le script de récupération s'occupe de remplacer le fichier quand un plus récent est reçu.
+
+\section{Caméra}
+
+La caméra Intel D435 est intégrée dans le système via un bloc fonctionnel personnalisé développé dans AICA Studio. Ce bloc utilise les données de profondeur captées par la caméra pour détecter la position des pièces à graver et adapter la trajectoire du bras robot en conséquence.
+Le retour de résultats devant être rapide, le code est optimisé pour minimiser le temps de traitement et permettre une mise a jour toutes les 300ms. Le but étant d'envoyer le robot à la position de la pièce à prendre et de corriger la trajectoire toutes les 300ms.
+Le programme fonctionne selon les étapes suivantes :
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[node distance=1.8cm, every node/.style={draw, align=center, rounded corners, minimum height=1cm}]
+        \node (load) [below of=start] {Téléchargement du modèle de la pièce};
+        \node (init) [below of=load] {Initialisation de la caméra};
+        \node (capture) [below of=init] {Capture image et profondeur};
+        \node (preprocess) [below of=capture] {Prétraitement couleur};
+        \node (cloud) [below of=preprocess] {Détection du nuage de points};
+        \node (match) [below of=cloud] {Correspondance de points};
+        \node (matrice) [below of=match] {Calcul matrice de transformation};
+        \node (publish) [below of=matrice] {Publication position et orientation};
+        \draw[->] (load) -- (init);
+        \draw[->] (init) -- (capture);
+        \draw[->] (capture) -- (preprocess);
+        \draw[->] (preprocess) -- (cloud);
+        \draw[->] (cloud) -- (match);
+        \draw[->] (match) -- (matrice);
+        \draw[->] (matrice) -- (publish);
+        \draw[->, thick] (publish.east) .. controls +(right:2.5cm) and +(right:2.5cm) .. (capture.east);
+    \end{tikzpicture}
+    \caption{Schéma de séquence du programme de la caméra Intel D435}
+\end{figure}
+
+Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la caméra offre une certaine liberté dans les paramètres de traitement. Il est par exemple possible de choisir la couleur de la pièce à détecter, modifier le modèle ainsi que le nombre de points de ce dernier. Cette flexibilité permet d'adapter le système tant dans la pièce à détecter que dans la rapidité de traitement.
+
+\subsection{Transformation du repère caméra au repère robot}
+
+Pour obtenir la position de la pièce détectée dans le repère du robot (ou du monde), le programme effectue une composition de transformations :
+
+\begin{itemize}
+    \item La position et l'orientation de la pièce sont d'abord calculées dans le repère de la caméra à partir du nuage de points.
+    \item La pose de la caméra dans le repère monde (ou robot) est connue et fournie sous forme de translation et quaternion (paramètre \texttt{camera\_pose\_world}).
+    \item On construit la matrice de transformation homogène de la caméra dans le monde : $T_{\text{cam} \to \text{world}}$.
+    \item On compose cette matrice avec la transformation de la pièce dans la caméra : $T_{\text{piece} \to \text{cam}}$.
+    \item La position finale de la pièce dans le monde est donc :
+          \[
+              T_{\text{piece} \to \text{world}} = T_{\text{cam} \to \text{world}} \cdot T_{\text{piece} \to \text{cam}}
+          \]
+    \item Le code utilise la librairie \texttt{scipy.spatial.transform.Rotation} pour convertir les quaternions en matrices de rotation, et numpy pour manipuler les matrices.
+\end{itemize}
+
+Cette méthode permet de publier la position et l'orientation de la pièce dans le repère global, ce qui est indispensable pour que le robot puisse saisir ou interagir avec la pièce détectée.
+
+\subsection{Valeurs de la matrice de transformation}
+
+Dans ce projet, il n'a pas été nécessaire de réaliser une calibration manuelle entre la caméra et le repère robot. En effet, grâce au modèle 3D précis de la maquette, la position et l'orientation de la caméra ont pu être déterminées virtuellement, ce qui a permis de renseigner directement la matrice de transformation dans le programme.
+
+\paragraph{Transformation caméra → monde}
+La pose de la caméra dans le monde utilisée dans le code est la suivante :
+\begin{itemize}
+    \item Translation (m) : $[0.420451,\ 0.0175,\ 0.766251]$
+    \item Quaternion (w, x, y, z) : $[0.707107,\ 0,\ -0.707107,\ 0]$
+\end{itemize}
+
+La matrice de transformation homogène correspondante est :
+\begin{equation*}
+    T_{\text{cam} \to \text{world}} =
+    \begin{bmatrix}
+        0 & 0 & -1 & 0.420451 \\
+        0 & 1 & 0  & 0.0175   \\
+        1 & 0 & 0  & 0.766251 \\
+        0 & 0 & 0  & 1
+    \end{bmatrix}
+\end{equation*}
+
+Cette transformation permet de passer des coordonnées caméra aux coordonnées monde (robot), ce qui est indispensable pour la localisation de la pièce par le robot.
+
+\section{AICA Studio}
+Afin de faire fonctionner les différents blocs fonctionnels développés, il est donc nécessaire de les intégrer dans AICA Studio. A l'aide de blocs de base du logiciel et de certains blocs fournis après coup par l'entreprise, il a été possible de créer un programme qui relie tous les éléments de la maquette ensemble.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \caption{Programme AICA Studio de la maquette de la graveuse laser intelligente}
+    \label{fig:aica_programme}
+\end{figure}
+
+

@@ -1,12 +1,31 @@
 \chapter{Analyse}
+\label{chap:analyse}
 
-\index{état de l'art}
-\index{méthode}
-
-
-\section{État de l'art}
+Ce chapitre présente l'analyse des risques liés à l'utilisation de la station de gravure laser intelligente, ainsi que la prise en main du bras robot Ufactory Xarm6 et du logiciel AICA Studio. Il s'agit d'une étape de découverte et d'apprentissage des outils et des technologies utilisées. Cela permet également de prouver le faisabilité du projet.
 
 \section{Analyse des risques}
+L'utilisation d'une station de gravure laser intelligente avec un bras robotisé en environnement public comporte plusieurs risques qu'il convient d'identifier, d'évaluer et de maîtriser. L'analyse suivante s'appuie sur le contexte du projet, les éléments matériels et logiciels utilisés, ainsi que les objectifs de sécurité et de fiabilité.
+
+\subsection{Risques identifiés}
+\begin{itemize}
+    \item \textbf{Risque laser} : Le laser utilisé pour la gravure présente un danger pour la vue et la peau en cas d'exposition accidentelle. Un mauvais contrôle logiciel ou une défaillance matérielle pourrait entraîner l'activation du laser hors de la zone prévue.
+    \item \textbf{Risque robotique} : Le bras robot Ufactory Xarm6, bien que collaboratif, peut provoquer des blessures par collision ou pincement si un utilisateur s'approche trop près pendant le fonctionnement.
+    \item \textbf{Risque électrique} : La station comporte plusieurs alimentations électriques (robot, laser, écran tactile) pouvant présenter un danger en cas de défaut d'isolation ou de manipulation inappropriée.
+    \item \textbf{Risque logiciel et synchronisation} : Une erreur dans la synchronisation entre le robot et le laser pourrait activer le laser au mauvais moment ou déplacer le robot de façon imprévue.
+    \item \textbf{Risque de mauvaise détection} : Une défaillance de la caméra ou une erreur dans le traitement des données pourrait entraîner une mauvaise localisation de la pièce à graver, provoquant des collisions ou des gravures hors zone.
+    \item \textbf{Risque d'utilisation publique} : En contexte de démonstration, le public peut adopter des comportements imprévisibles (toucher, interférer, etc.), augmentant les risques d'accident.
+\end{itemize}
+
+\subsection{Mesures de prévention et de maîtrise}
+\begin{itemize}
+    \item Mise en place de protections physiques (capot, barrières) autour de la zone de gravure. (à mettre en place)
+    \item Activation du laser uniquement lorsque le robot est en position sécurisée et la zone libre.
+    \item Surveillance logicielle de la synchronisation robot/laser et gestion des erreurs critiques.
+    \item Validation logicielle de la détection de pièce et limitation des mouvements du robot en cas d'incertitude.
+    \item Présence d'un opérateur formé lors des démonstrations publiques.
+\end{itemize}
+
+Cette analyse permet de garantir un fonctionnement sûr et fiable de la station, en anticipant les principaux scénarios à risque et en mettant en place des mesures adaptées.
 
 \section{Prise en main du bras robot}
 La prise en main du bras robot Ufactory Xarm6 a été une des première étape du projet. Le but était de se familiariser avec les commandes et de comprendre les limites physiques et logicielles du robot.
@@ -20,7 +39,7 @@ Le logiciel UFACTORY-Studio est utile pour configurer la position initiale du ro
 En plus de cela, le logiciel offre un contrôle complet sur les entrées/sorties (appelées à partir de maintenant \gls{io}), les axes, la vitesse de déplacement et l'ouverture/fermeture de la pince. Il est également possible de créer des programmes de mouvement en utilisant le langage  de programation Python ou un langage visuel propriétaire basé sur le Python. Le langage visuel reste très basique et ne permet pas de créer des programmes complexes qui sortent du cadre de la cinématique du robot.
 
 \subsection{Python SDK}
-Pour s'affranchir des limitations du logiciel UFACTORY-Studio, il est possible d'utiliser le SDK Python \cite{PythonSDK} fourni par Ufactory. Ce SDK permet de contrôler le robot de manière plus avancée et de créer des programmes plus complexes. Le langage de base de contrôle du robot étant le Python, il est possible d'utiliser n'importe quel IDE Python pour développer des programmes. La documentation du SDK étant très complète avec de nombreux exemples, la compréhension et la prise en main du SDK se sont faites rapidement. De plus, les contrôles de cinématique sont plus "bas niveau" ce qui offre plus de flexibilité notamment au niveau de l'accéleration, du \gls{jerk} et des opérations sur les positions.
+Pour s'affranchir des limitations du logiciel UFACTORY-Studio, il est possible d'utiliser le \gls{sdk} Python \cite{PythonSDK} fourni par Ufactory. Ce SDK permet de contrôler le robot de manière plus avancée et de créer des programmes plus complexes. Le langage de base de contrôle du robot étant le Python, il est possible d'utiliser n'importe quel IDE Python pour développer des programmes. La documentation du SDK étant très complète avec de nombreux exemples, la compréhension et la prise en main du SDK se sont faites rapidement. De plus, les contrôles de cinématique sont plus "bas niveau" ce qui offre plus de flexibilité notamment au niveau de l'accéleration, du \gls{jerk} et des opérations sur les positions.
 
 \subsection{Entrées/sorties}
 Le contrôleur du bras robot offre plusieurs types d'IO:
@@ -35,35 +54,35 @@ Le contrôleur du bras robot offre plusieurs types d'IO:
 \definecolor{AnalogColor}{HTML}{E1FFC1}
 
 \begin{tcolorbox}[colframe=black, colback=SafetyColor, title=Safety]
-\textbf{Connexions :} GND | EI0 | GND | EI1 | GND | SI0 | GND | SI1
+    \textbf{Connexions :} GND | EI0 | GND | EI1 | GND | SI0 | GND | SI1
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=PowerColor, title=Power]
-\textbf{Connexions :} PWR | 24V-IN | GND | RI0 | NC | GND | ON | OFF
+    \textbf{Connexions :} PWR | 24V-IN | GND | RI0 | NC | GND | ON | OFF
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=ConfigInputColor, title=Configurable Inputs]
-\textbf{Connexions :} GND | CI0 | CI1 | CI2 | CI3 | GND | CI4 | CI5 |CI6 | CI7
+    \textbf{Connexions :} GND | CI0 | CI1 | CI2 | CI3 | GND | CI4 | CI5 |CI6 | CI7
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=DigitalInputColor, title=Digital Inputs]
-\textbf{Connexions :} GND |  DI0 | DI1 | DI2 | DI3 | GND | DI4 | DI5 | DI6 | DI7
+    \textbf{Connexions :} GND |  DI0 | DI1 | DI2 | DI3 | GND | DI4 | DI5 | DI6 | DI7
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=ConfigOutputColor, title=Configurable Outputs]
-\textbf{Connexions :} 24V | CO0 | CO1 | CO2 | CO3 | 24V | CO4 | CO5 | CO6 | CO7
+    \textbf{Connexions :} 24V | CO0 | CO1 | CO2 | CO3 | 24V | CO4 | CO5 | CO6 | CO7
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=DigitalOutputColor, title=Digital Outputs]
-\textbf{Connexions :} 24V | DO0 | DO1 | DO2 | DO3 | 24V | DO4 | DO5 | DO6 | DO7
+    \textbf{Connexions :} 24V | DO0 | DO1 | DO2 | DO3 | 24V | DO4 | DO5 | DO6 | DO7
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=RS485Color, title=RS485]
-\textbf{Connexions :} 24V | 24V | M\_A | M\_B | GND | L\_A | L\_B | GND
+    \textbf{Connexions :} 24V | 24V | M\_A | M\_B | GND | L\_A | L\_B | GND
 \end{tcolorbox}
 
 \begin{tcolorbox}[colframe=black, colback=AnalogColor, title=Analog]
-\textbf{Connexions :} GND | AI0 | GND | AI1 | GND | AO0 | GND | AO1
+    \textbf{Connexions :} GND | AI0 | GND | AI1 | GND | AO0 | GND | AO1
 \end{tcolorbox}
 
 Ces IO premettent la communication avec des éléments externes.
@@ -75,3 +94,46 @@ AICA Studio est un logiciel qui simplifie l'intégration et la programmation de 
 L'installation de AICA Studio est, contrairement à UFACTORY-Studio, un peu plus complexe. Il est nécessaire d'utiliser un système d'exploitation Linux ou Posix. Le guide d'installation \cite{AICADocs} est complet et facile à suivre. Cependant, il est tout de même nécessaire d'avoir quelques connaissance de base en ligne de commandes et en gestion de systèmes Linux. L'avantage de cette installation est qu'elle permet de créer un environnement complet en incluant dans un \gls{conteneur} \gls{docker} tous les outils nécessaire au bon fonctionnement de l'application.
 
 \subsection{Démarrage de AICA Studio}
+Le démarrage de AICA Studio se fait comme n'importe quelle autre application Linux. Lorsque l'application est lancée pour la première foi, une fenêtre de configuration s'ouvre pour permettre d'entrer la clef de licence. Par la suite, l'application se lance et affiche une page de réglages pour choisir la version, les packages à installer et les volumes partagés pour l'utilisation de fichiers.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \caption{Page de démarrage de AICA Studio}
+    \label{fig:aica_startup}
+\end{figure}
+
+\subsection{Interface de AICA Studio}
+Le logiciel est relativement intuitif et facile à prendre en main pour ce qui est de la création de programmes et la connexion des blocs fonctionnels. Cependant à l'heure actuelle, il est nécesasire de comprendre et de maitriser des concepts de base de la programmation avec \gls{ros2} pour pouvoir comprendre et utiliser les différentes possibilités offertes par le logiciel. Il est donc recommandé de suivre les tutoriels et la documentation fournis par AICA ainsi que les ressources en ligne pour se familiariser avec les concepts de base de \gls{ros2} avant de se lancer dans la création de programmes.
+
+Il est possible de créer des programmes de deux manières différentes avec AICA Studio :
+\begin{itemize}
+    \item En utilisant des blocs fonctionnels prédéfinis, qui permettent de créer des programmes de manière visuelle en connectant les blocs entre eux.
+    \item En utilisant la fenêtre de programmation \gls{yaml}, qui permet d'avoir une vison plus detaillée du programme et de modifier les paramètres sans passer par la fenêtre de configuration des blocs.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=0.95\linewidth]{assets/figures/img_a_venir.png}
+        \caption*{Programmation par blocs visuels}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=0.95\linewidth]{assets/figures/img_a_venir.png}
+        \caption*{Programmation via YAML}
+    \end{minipage}
+    \caption{Comparaison entre la programmation visuelle (gauche) et la programmation YAML (droite) dans AICA Studio.}
+    \label{fig:comparaison_yaml_visuel}
+\end{figure}
+
+Concernant le reste de l'interface, le logiciel contient :
+\begin{itemize}
+    \item Une barre de menu, qui permet d'accéder à la documentation, aux contrôle \gls{hardware} et à la page programmation par blocs.
+    \item Un onglet réglages qui permet de redémarrer l'application, accéder au terminal et démarrer à \gls{rviz}.
+    \item Un bouton pour accéder aux\gls{logs} de l'application.
+    \item Un onglet pour accéder aux blocs fonctionnels disponibles.
+\end{itemize}
+
+

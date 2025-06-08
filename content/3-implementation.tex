@@ -19,13 +19,13 @@ La programmation via AICA studio permet un contrôle fin de la cinématique, not
 
 \subsection{Graveuse laser Creality Falcon}
 
-La graveuse laser Creality Falcon est commandée via des fichiers G-code, un langage standard dans le domaine des machines-outils à commande numérique. Les motifs à graver, initialement créés au format DXF (fichier de dessin vectoriel), sont convertis en fichiers G-code via un script développé spécialement dans le cadre de ce projet.
+La graveuse laser Creality Falcon est commandée via des fichiers G-code, un langage standard dans le domaine des machines-outils à commande numérique. Les motifs à graver, initialement créés au format \gls{dxf}, sont convertis en fichiers G-code via un script développé spécialement dans le cadre de ce projet.
 
 Ce script réalise les étapes suivantes :
 \begin{itemize}
     \item Lecture et analyse des contours du fichier DXF.
     \item Génération de trajectoires compatibles avec le protocole G-code.
-    \item Communication entré le logiciel et la graveuse laser.
+    \item Communication entre le logiciel et la graveuse laser.
 \end{itemize}
 
 Le fichier G-code généré est ensuite envoyé à la Creality Falcon qui réalise la gravure. Une synchronisation précise avec le bras robot est nécessaire pour assurer que le laser ne s’active que lorsque le bras est en position correcte.
@@ -44,6 +44,17 @@ La caméra Intel D435 est utilisée pour la détection en 3D des pièces à grav
     \item D’adapter la trajectoire du bras robot en fonction de la position exacte des pièces détectées.
 \end{itemize}
 
-L’intégration de la caméra dans le système est réalisée via un bloc fonctionnel personnalisé développé dans AICA Studio, utilisant les données 3D captées pour prendre des décisions en temps réel. Le fonctionnement détaillé de ce bloc sera présenté dans le \textbf{chapitre \ref{chap:blocs_fonctionnels}}.
+L’intégration de la caméra dans le système est réalisée via un bloc fonctionnel personnalisé développé dans AICA Studio, utilisant les données 3D captées pour prendre des décisions en temps réel. Le fonctionnement détaillé de ce bloc sera présenté dans le \textbf{chapitre \ref{chap:programmation}}.
 
+\section{Modèle 3D de la maquette}
 
+Le modèle 3D de la maquette a été réalisé à l'aide du logiciel de modélisation 3D Fusion 360. Il permet de visualiser l'ensemble du système, y compris le bras robot, la graveuse laser, l'écran tactile et la caméra. Ce modèle est utilisé dans AICA Studio pour la visualisation de l'espace de travail.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/modele_3d.png}
+    \caption{Modèle 3D de la maquette de la graveuse laser intelligente}
+    \label{fig:maquette_3d}
+\end{figure}
+
+Ce travail de modélisation n'était pas spécialement demandé dans le projet mais il a été réalisé pour faciliter la conception de pièces mécaniques, et la définition des points de passage du bras robot. Cela évite des erreurs de mesures et permet de mieux visualiser l'ensemble du système avant la fabrication des pièces ainsi que l'encombrement de la maquette.
