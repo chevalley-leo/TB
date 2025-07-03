@@ -7,17 +7,27 @@ La maquette finale de la graveuse laser intelligente est constituée de plusieur
 \begin{itemize}
     \item \textbf{Bras robot Ufactory Xarm6}
     \item \textbf{Graveuse laser Creality Falcon}
-    \item \textbf{Écran tactile ED101}
+    \item \textbf{Écran tactile ED-HMI3010-101C}
     \item \textbf{Caméra Intel D435}
 \end{itemize}
 
-\subsection{Bras robot Ufactory Xarm6}
+\section{Bras robot Ufactory Xarm6}
 
-Le bras robot Ufactory Xarm6 est un bras robotique collaboratif à 6 degrés de liberté, offrant une bonne précision et une flexibilité importante pour la manipulation dans l’espace de travail. Le contrôle du bras est réalisé principalement via le SDK Python fourni par Ufactory, ainsi que par l’interface graphique AICA Studio qui permet la programmation par blocs fonctionnels.
+Le bras robot Ufactory Xarm6 est un bras robotique collaboratif à 6 degrés de liberté, offrant une bonne précision et une flexibilité importante pour la manipulation dans l’espace de travail. Le contrôle du bras est réalisé principalement par l’interface graphique AICA Studio qui permet la programmation par blocs fonctionnels.
 
+\subsection{Programmation du bras robot}
 La programmation via AICA studio permet un contrôle fin de la cinématique, notamment la gestion des accélérations, vitesses, et positions intermédiaires. Le logiciel offre plusieurs possibilités de contrôle. La communication avec le bras s’effectue par Ethernet.
 
-\subsection{Graveuse laser Creality Falcon}
+\subsection{Modifications du bras robot}
+La pince fournie par Ufactory à une grande course d'ouverture mais les doigts n'étaient pas très adaptés à la prise de pièces et au placement sous la graveuse laser. Il a donc été nécessaire de concevoir des doigts adaptés à l'utilisation demandée.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/Pince_Xarm6.png}
+    \caption{Pince du bras robot Ufactory Xarm6 modifiée pour la prise de pièces}
+    \label{fig:pince_robot}
+\end{figure}
+
+\section{Graveuse laser Creality Falcon}
 
 La graveuse laser Creality Falcon est commandée via des fichiers G-code, un langage standard dans le domaine des machines-outils à commande numérique. Les motifs à graver, initialement créés au format \gls{dxf}, sont convertis en fichiers G-code via un script développé spécialement dans le cadre de ce projet.
 
@@ -30,13 +40,13 @@ Ce script réalise les étapes suivantes :
 
 Le fichier G-code généré est ensuite envoyé à la Creality Falcon qui réalise la gravure. Une synchronisation précise avec le bras robot est nécessaire pour assurer que le laser ne s’active que lorsque le bras est en position correcte.
 
-\subsection{Écran tactile ED101}
+\section{Écran tactile ED-HMI3010-101C}
 
-L’écran tactile ED101 permet de choisir ce que la graveuse va dessiner. Via une interface graphique, il est possible de dessiner à la main, avec des formes prédéfinies ou avec du texte dans la zone de gravure.
+L’écran tactile ED-HMI3010-101C (appelé ED-101) permet de choisir ce que la graveuse va dessiner. Via une interface graphique, il est possible de dessiner à la main, avec des formes prédéfinies ou avec du texte dans la zone de gravure.
 
 Cette interface est spécialement conçue pour une utilisation en tant que démonstrateur devant du public.
 
-\subsection{Caméra Intel D435}
+\section{Caméra Intel D435}
 
 La caméra Intel D435 est utilisée pour la détection en 3D des pièces à graver dans l’espace de travail. Grâce à sa capacité à fournir des données de profondeur en temps réel, elle permet :
 \begin{itemize}
@@ -57,4 +67,4 @@ Le modèle 3D de la maquette a été réalisé à l'aide du logiciel de modélis
     \label{fig:maquette_3d}
 \end{figure}
 
-Ce travail de modélisation n'était pas spécialement demandé dans le projet mais il a été réalisé pour faciliter la conception de pièces mécaniques, et la définition des points de passage du bras robot. Cela évite des erreurs de mesures et permet de mieux visualiser l'ensemble du système avant la fabrication des pièces ainsi que l'encombrement de la maquette.
+Ce travail de modélisation a été réalisé pour faciliter la conception de pièces mécaniques, et la définition des points de passage du bras robot. Cela évite des erreurs de mesures et permet de mieux visualiser l'ensemble du système avant la fabrication des pièces ainsi que l'encombrement de la maquette.
