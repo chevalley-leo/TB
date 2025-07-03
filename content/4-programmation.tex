@@ -165,13 +165,31 @@ Dans ce projet, il n'a pas été nécessaire de réaliser une calibration manuel
     \captionof{figure}{Illustration de la transformation de repère caméra vers monde}
 \end{minipage}
 
-\section{AICA Studio}
+\section{Programme AICA Studio}
 Afin de faire fonctionner les différents blocs fonctionnels développés, il est donc nécessaire de les intégrer dans AICA Studio. A l'aide de blocs de base du logiciel et de certains blocs fournis après coup par l'entreprise, il a été possible de créer un programme qui relie tous les éléments de la maquette ensemble.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Prog_All.png}
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_main_app.png}
     \caption{Programme AICA Studio de la maquette de la graveuse laser intelligente}
     \label{fig:aica_programme}
 \end{figure}
 
+On constate beaucoup d'éléments différents dans le programme, notamment :
+\begin{itemize}
+    \item Le bloc TCP de communication avec le PC de l'écran tactile.
+    \item Le bloc de la graveuse laser qui permet de charger le fichier DXF et de lancer la machine
+    \item Le bloc de la caméra qui permet de détecter la position de la pièce.
+    \item Le bloc du bras robot qui permet de communiquer directement avec l'appareil
+    \item Le bloc de séquence qui permet de gérer l'ordre d'exécution des différentes tâches lorsque le robot attrape une pièce.
+    \item Les blocs de gestion de prise de pièce qui assurent une approche correcte et une préhension efficace.
+    \item Les blocs de gestion de vérification de prise de pièce et d'avortement de la tâche en cours si nécessaire.
+\end{itemize}
+
+Certains de ces blocs ou groupes de blocs on déjà étés expliqués ci-dessus, d'autres serons détaillés dans les sections suivantes.
+
+\subsection{Bloc de séquence}
+
+\subsection{Blocs de gestion de prise de pièce}
+
+\subsection{Blocs de gestion et d'avortement}
 
