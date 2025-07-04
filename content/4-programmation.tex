@@ -187,9 +187,69 @@ On constate beaucoup d'éléments différents dans le programme, notamment :
 
 Certains de ces blocs ou groupes de blocs on déjà étés expliqués ci-dessus, d'autres serons détaillés dans les sections suivantes.
 
+\subsection{Bloc du bras robot}
+
+Le bloc du bras robot est ce qui permet la communication entre le programme et les différents acctionneurs du robot. Avec plusieurs option de controllers, il est possible de piloter le robot de plusieurs manières différentes (mais pas en même temps). Dans le cas de la maquette, c'est un contrôle de vélocité et un contrôle de trajectoire qui sont utilisés. Le bloc permet également de gérer l'ouverture et la fermeture de la pince.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \caption{Bloc du bras robot dans AICA Studio}
+    \label{fig:robot_block}
+\end{figure}
+
+On constate plusieurs entrées et sorties dans le bloc du bras robot qui se réunissent en trois types :
+\begin{itemize}
+    \item L'entrée d'activation ou de désactivation du bloc entiers.
+    \item Les entrées de commande du robot.
+    \item Les sorties d'états du robot.
+\end{itemize}
+
+
+Dans le cas des sorties d'états du robot, toutes ne sont pas utilisées dans ce projets et donc n'apparaissent pas sur l'illustration.
+
 \subsection{Bloc de séquence}
+
+Le bloc de séquence est utilisé dans la seconde partie du programme. Il sert à traiter des événements tel que des déplacements ainsi que donner et reçevoir des signaux.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \caption{Bloc de séquence dans AICA Studio}
+    \label{fig:sequence_block}
+\end{figure}
+
+Dans ce cas, le bloc de séquence est activé après que le robot ait saisi la pièce. Dans un premier temps, un délai d'une seconde est appliqué pour laisser le temps à l'un des contrôleur du robot de se désactiver. ensuite le signal est donné au second contrôleur de s'activer et un second délais est laissé. Ensuite, pour faciliter la compréhension du programme, toutes les connexions qui vont au même endroit sont sur la même ligne. On peut donc voir que le quatrième élément de la séquence est une commande de position. D'autres commandes de positions sont alors identifiables en septième et dixième position. Le cinquième élément lui, est un signal venant du robot qui ne s'active que quand le robot à fini de se déplacer. Cela permet de contrôler le déroulement de la séquence en mettant des points de vérifications dans le cas ou un mouvement ne se passe pas comme prévu. Les éléments 8 et 11 sont aussi des retours. Le sixième élémeent est un signal qui va directement dans le bloc d'interface avec la graveuse laser. C'est lui qui s'occupe de démarrer la graveuse laser. L'élément 9 est un signal de retour venant du bloc d'interface de la graveuse laser. Il est utilisé pour savoir si la graveuse a fini de graver ou non. Ensuite le douzième élément est un signal envoyé au bloc robot pour ouvrir la pince. Pour terminer, les trois derniers éléments remettent le programme dans sa position de départ, en désactivant le contrôleur utilisé par la séquence et en réactivant le contrôleur utilisé pour la prise de la pièce.
 
 \subsection{Blocs de gestion de prise de pièce}
 
-\subsection{Blocs de gestion et d'avortement}
+Les blocs de gestion de prise de la pièce sont divisées en deux parties qui fonctionnent en alternance. La première partie est utilisée pour l'approche de la pièce et la seconde pour le retour dans la position de départ dans le cas ou la pièce n'est plus détectée. L'avantage de cette approche est que le robot se met automatiquement dans la position de départ au démarrage du programme.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \caption{Blocs de gestion de prise de pièce dans AICA Studio}
+    \label{fig:piece_block}
+\end{figure}
+
+
+Le fonctionnement de ces blocs repose sur une logique d'alternance entre deux états principaux : l'approche de la pièce et le retour à la position de départ. Lorsqu'une pièce est détectée par la caméra, le robot reçoit la position cible et commence à s'approcher de la pièce en suivant la trajectoire calculée. Si, à tout moment, la pièce n'est plus détectée (par exemple, si elle a été retirée), le robot interrompt son mouvement et retourne automatiquement à sa position de départ pour attendre une nouvelle détection.
+
+Cette logique permet d'assurer la sécurité et la robustesse du système : le robot ne tente jamais de saisir une pièce absente et se remet toujours dans une position sûre en cas d'erreur ou d'absence de détection. De plus, cela facilite la reprise du processus dès qu'une nouvelle pièce est détectée, sans intervention manuelle.
+
+L'implémentation de cette alternance est réalisée à l'aide du bloc de détection de la pièce, qui envoie active ou désactive les blocs en fonction de si la pièce est détectée ou non.
+
+
+\subsection{Blocs de vérification et d'avortement}
+
+Les blocs de verification et d'avortement sont des éléments de sécurité ajoutés afin de s'assurer que le robot ne continue pas sa séquence si la pièce n'est pas prise. Cela rajoute un point de sécurité qui minimise donc les conséquences d'une mauvaise prise de la pièce.  Cette décision à été prise suite a l'élaboration du tableau des risques du \textbf{chapitre \ref{chap:analyse}}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Abort_sequence.png}
+    \caption{Blocs de vérification et d'avortement dans AICA Studio}
+    \label{fig:verification_block}
+\end{figure}
+
+On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arreter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste attend la validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
 

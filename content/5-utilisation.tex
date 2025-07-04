@@ -108,7 +108,7 @@ A cause de la complexité de la détection de la pièces, des règles de détect
 
 \subsection{Préhension}
 
-Lorsque la pièce est tendue au robot par l'utilisateur dans les bonnes conditions, le robot se déplace alors vers la position de la pièce et se rapproche le plus possible. Quand le programme détermine que la pièce est suffisamment proche de la pince à l'aide d'un bloc de collision, le robot ferme la pince pour prendre la pièce. Il est important de noter que le robot ne vérifie pas si la pièce est bien prise avant de se déplacer vers la zone de gravure. Cela demande trop de temps et de complexité au programme. Cependant, le robot effectue tout de même un replacement de la pièce après la prise pour s'assurer que la pièce est bien placée pour la gravure.
+Lorsque la pièce est tendue au robot par l'utilisateur dans les bonnes conditions, le robot se déplace alors vers la position de la pièce et se rapproche le plus possible. Quand le programme détermine que la pièce est suffisamment proche de la pince à l'aide d'un bloc de collision, le robot ferme la pince pour prendre la pièce. Le robot effectue ensuite un replacement de la pièce après la prise pour s'assurer que la pièce est bien placée pour la gravure.
 
 \begin{figure}[H]
     \centering
@@ -120,4 +120,8 @@ Lorsque la pièce est tendue au robot par l'utilisateur dans les bonnes conditio
 \section{Gravure de la pièce}
 
 La gravure de la pièce se fait automatiquement après la prise de celle-ci. Le robot se déplace alors vers la zone de gravure et commence à graver le dessin précédemment dessiné par l'utilisateur.
+La gravure se fait dans l'ordre de dessin sur l'écran et non dans l'ordre le plus optimisé. Cela aurait demandé une programmation différente et plus complexe. De plus, la gravue étant très petite, le temps économisé n'aurait pas été significatif.
 
+\section{Retour de la pièce}
+
+Lorsque le robot a fini de graver la pièce, il retourne la pièce à l'utilisateur en la lachant au dessus de la boîte prévue à cet effet.
