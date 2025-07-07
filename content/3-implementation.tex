@@ -13,13 +13,13 @@ La maquette finale de la graveuse laser intelligente est constituée de plusieur
 
 \section{Bras robot Ufactory Xarm6}
 
-Le bras robot Ufactory Xarm6 est un bras robotique collaboratif à 6 degrés de liberté, offrant une bonne précision et une flexibilité importante pour la manipulation dans l’espace de travail. Le contrôle du bras est réalisé principalement par l’interface graphique AICA Studio qui permet la programmation par blocs fonctionnels.
+Le bras robot Ufactory Xarm6 est un bras robotique collaboratif à 6 degrés de liberté, offrant une bonne précision et une flexibilité importante pour la manipulation dans l'espace de travail. Le contrôle du bras est réalisé principalement par l’interface graphique AICA Studio qui permet la programmation par blocs fonctionnels.
 
 \subsection{Programmation du bras robot}
-La programmation via AICA studio permet un contrôle fin de la cinématique, notamment la gestion des accélérations, vitesses, et positions intermédiaires. Le logiciel offre plusieurs possibilités de contrôle. La communication avec le bras s’effectue par Ethernet.
+La programmation via AICA studio permet un contrôle fin de la cinématique, notamment la gestion des accélérations, vitesses, et positions intermédiaires. Le logiciel offre plusieurs possibilités de contrôle. La communication avec le bras s’effectue par ethernet.
 
 \subsection{Modifications du bras robot}
-La pince fournie par Ufactory à une grande course d'ouverture mais les doigts n'étaient pas très adaptés à la prise de pièces et au placement sous la graveuse laser. Il a donc été nécessaire de concevoir des doigts adaptés à l'utilisation demandée.
+La pince fournie par Ufactory a une grande course d'ouverture mais les doigts n'étaient pas très adaptés à la prise de pièces et au placement sous la graveuse laser. Il a donc été nécessaire de concevoir des doigts adaptés à l'utilisation demandée.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/figures/Pince_Xarm6.png}
@@ -27,8 +27,13 @@ La pince fournie par Ufactory à une grande course d'ouverture mais les doigts n
     \label{fig:pince_robot}
 \end{figure}
 
+En rouge, les doigts offrent une visibilité optimale pour la caméra et permettent une prise plus précise qu'avec des doigts sans modification. Imprimées en 3D, ces pièces sont suffisamment robustes pour prendre les pièces sans les lâcher mais sont suffisamment fragiles pour céder en cas de contact fortuit avec des autres éléments de la maquette.
+
 \section{Graveuse laser Creality Falcon}
 
+La graveuse laser Creality Falcon a été choisie comme graveuse laser car elle offre une bonne qualité de gravure par rapport à sa vitesse et à sa puissance par rapport à son prix. De plus, cette graveuse est compatible avec des fichiers G-code, et il est également possible d'envoyer les instructions ligne par ligne via la connexion USB-C, ce qui permet un contrôle plus fin et interactif du processus de gravure. Cette fonctionnalité sera utilisée plus tard pour le contrôle de la graveuse avec AICA Studio
+
+\subsection{Utilisation}
 La graveuse laser Creality Falcon est commandée via des fichiers G-code, un langage standard dans le domaine des machines-outils à commande numérique. Les motifs à graver, initialement créés au format \gls{dxf}, sont convertis en fichiers G-code via un script développé spécialement dans le cadre de ce projet.
 
 Ce script réalise les étapes suivantes :
@@ -38,7 +43,11 @@ Ce script réalise les étapes suivantes :
     \item Communication entre le logiciel et la graveuse laser.
 \end{itemize}
 
-Le fichier G-code généré est ensuite envoyé à la Creality Falcon qui réalise la gravure. Une synchronisation précise avec le bras robot est nécessaire pour assurer que le laser ne s’active que lorsque le bras est en position correcte.
+Le fichier G-code généré est ensuite envoyé à la Creality Falcon qui réalise la gravure. Une synchronisation précise avec le bras robot est nécessaire pour assurer que le laser ne s'active que lorsque le bras est en position correcte.
+
+\subsection{Modifications}
+
+Afin que la graveuse laser s'intègre bien dans la maquette et que le robot puisse se positionner correctement sous la tête laser, des pieds personnalisés ont été conçus en 3D afin de réhauser la graveuse. Ces pieds permettent également de fixer l'ensemble de la machine à la table afin de minimiser les problèmes de précisions.
 
 \section{Écran tactile ED-HMI3010-101C}
 
@@ -58,7 +67,7 @@ L’intégration de la caméra dans le système est réalisée via un bloc fonct
 
 \section{Modèle 3D de la maquette}
 
-Le modèle 3D de la maquette a été réalisé à l'aide du logiciel de modélisation 3D Fusion 360. Il permet de visualiser l'ensemble du système, y compris le bras robot, la graveuse laser, l'écran tactile et la caméra. Ce modèle est utilisé dans AICA Studio pour la visualisation de l'espace de travail.
+Le modèle 3D de la maquette a été réalisé à l'aide du logiciel de modélisation 3D Fusion 360. Il permet de visualiser l'ensemble du système, y compris le bras robot, la graveuse laser, l'écran tactile et la caméra. Ce modèle est utilisé dans AICA Studio pour la visualisation de l'espace de travail et le placement des points de passage du robot.
 
 \begin{figure}[H]
     \centering

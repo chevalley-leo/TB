@@ -94,7 +94,7 @@ Le programme fonctionne selon les étapes suivantes :
     \label{fig:sequence_camera_illustre}
 \end{figure}
 
-Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la caméra offre une certaine liberté dans les paramètres de traitement. Il est par exemple possible de choisir la couleur de la pièce à détecter, modifier le modèle ainsi que le nombre de points de ce dernier. Cette flexibilité permet d'adapter le système tant dans la pièce à détecter que dans la rapidité de traitement.
+Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la caméra offre une certaine liberté dans les paramètres de traitement. Il est par exemple possible de choisir la couleur de la pièce à détecter, modifier le modèle ainsi que le nombre de points de ce dernier. Cette flexibilité permet d'adapter le système tant dans la pièce à détecter que dans la rapidité de traitement. D'autres réglages sont aussi disponibles.
 
 \begin{figure}[H]
     \centering
@@ -112,6 +112,11 @@ Pour obtenir la position de la pièce détectée dans le repère du robot (ou du
           \begin{itemize}
               \item La position de la pièce est estimée en superposant le centroïde du modèle 3D (référence) et celui de la pièce détectée dans l'image. Cette position est donc exprimée dans le repère de la caméra.
               \item La rotation de la pièce est déterminée en testant différentes orientations (rotation degré par degré autour de chaque axe) et en cherchant celle qui aligne au mieux le modèle 3D avec la pièce détectée. Cette rotation est également exprimée dans le repère de la caméra.
+
+              \inputminted[firstline=176, lastline=181, fontsize=\small, linenos, frame=lines, breaklines, bgcolor=gray!10]{python}{assets/code/piece_detection.py}
+              \captionof{listing}{Rotation sur chaque axe pour trouver la meilleure orientation de la pièce dans le code python}
+              \label{lst:piece_detection}
+
           \end{itemize}
     \item \textbf{Transformation du repère caméra au repère monde (robot)} :
           \begin{itemize}
@@ -132,6 +137,8 @@ Pour obtenir la position de la pièce détectée dans le repère du robot (ou du
           \end{itemize}
 \end{enumerate}
 
+
+
 Cette méthode permet de publier la position et l'orientation de la pièce dans le repère global, ce qui est indispensable pour que le robot puisse saisir ou interagir avec la pièce détectée.
 
 \subsection{Valeurs de la matrice de transformation}
@@ -150,10 +157,10 @@ Dans ce projet, il n'a pas été nécessaire de réaliser une calibration manuel
     \begin{equation*}
         T_{\text{cam} \to \text{world}} =
         \begin{bmatrix}
-            0 & -1 & 0 & 0.420451 \\
-           -1 & 0 & 0  & 0.0175   \\
-            0 & 0 & -1  & 0.766251 \\
-            0 & 0 & 0  & 1
+            0  & -1 & 0  & 0.420451 \\
+            -1 & 0  & 0  & 0.0175   \\
+            0  & 0  & -1 & 0.766251 \\
+            0  & 0  & 0  & 1
         \end{bmatrix}
     \end{equation*}
     Cette transformation permet de passer des coordonnées caméra aux coordonnées monde (robot), ce qui est indispensable pour la localisation de la pièce par le robot.
@@ -235,7 +242,7 @@ Les blocs de gestion de prise de la pièce sont divisées en deux parties qui fo
 
 Le fonctionnement de ces blocs repose sur une logique d'alternance entre deux états principaux : l'approche de la pièce et le retour à la position de départ. Lorsqu'une pièce est détectée par la caméra, le robot reçoit la position cible et commence à s'approcher de la pièce en suivant la trajectoire calculée. Si, à tout moment, la pièce n'est plus détectée (par exemple, si elle a été retirée), le robot interrompt son mouvement et retourne automatiquement à sa position de départ pour attendre une nouvelle détection.
 
-Cette logique permet d'assurer la sécurité et la robustesse du système : le robot ne tente jamais de saisir une pièce absente et se remet toujours dans une position sûre en cas d'erreur ou d'absence de détection. De plus, cela facilite la reprise du processus dès qu'une nouvelle pièce est détectée, sans intervention manuelle.
+Cette logique permet d'assurer la sécurité et la robustesse du système: le robot ne tente jamais de saisir une pièce absente et se remet toujours dans une position sûre en cas d'erreur ou d'absence de détection. De plus, cela facilite la reprise du processus dès qu'une nouvelle pièce est détectée, sans intervention manuelle.
 
 L'implémentation de cette alternance est réalisée à l'aide du bloc de détection de la pièce, qui envoie active ou désactive les blocs en fonction de si la pièce est détectée ou non.
 
@@ -251,5 +258,7 @@ Les blocs de verification et d'avortement sont des éléments de sécurité ajou
     \label{fig:verification_block}
 \end{figure}
 
-On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arreter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste attend la validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
+On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arreter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste attends la validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
+
+
 
