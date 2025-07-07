@@ -15,10 +15,10 @@ Le logiciel UFACTORY-Studio est utile pour configurer la position initiale du ro
 En plus de cela, le logiciel offre un contrôle complet sur les entrées/sorties (appelées à partir de maintenant \gls{io}), les axes, la vitesse de déplacement et l'ouverture/fermeture de la pince. Il est également possible de créer des programmes de mouvement en utilisant le langage  de programation Python ou un langage visuel propriétaire basé sur le Python. Le langage visuel reste très basique et ne permet pas de créer des programmes complexes qui sortent du cadre de la cinématique du robot.
 
 \subsection{Python SDK}
-Pour s'affranchir des limitations du logiciel UFACTORY-Studio, il est possible d'utiliser le \gls{sdk} Python \cite{PythonSDK} fourni par Ufactory. Ce SDK permet de contrôler le robot de manière plus avancée et de créer des programmes plus complexes. Le langage de base de contrôle du robot étant le Python, il est possible d'utiliser n'importe quel IDE Python pour développer des programmes. La documentation du SDK étant très complète avec de nombreux exemples, la compréhension et la prise en main du SDK se sont faites rapidement. De plus, les contrôles de cinématique sont plus "bas niveau" ce qui offre plus de flexibilité notamment au niveau de l'accéleration, du \gls{jerk} et des opérations sur les positions.
+Pour s'affranchir des limitations du logiciel UFACTORY-Studio, il est possible d'utiliser le \gls{sdk} Python \cite{PythonSDK} fourni par Ufactory. Ce SDK permet de contrôler le robot de manière plus avancée et de créer des programmes plus complexes. Le langage de base de contrôle du robot étant le Python, il est possible d'utiliser n'importe quel \gls{IDE} Python pour développer des programmes. La documentation du \gls{sdk} étant très complète avec de nombreux exemples, la compréhension et la prise en main du SDK se sont faites rapidement. De plus, les contrôles de cinématique sont plus "bas niveau" ce qui offre plus de flexibilité notamment au niveau de l'accéleration, du \gls{jerk} et des opérations sur les positions.
 
 \subsection{Entrées/sorties}
-Le contrôleur du bras robot offre plusieurs types d'IO:
+Le contrôleur du bras robot offre plusieurs types d'\gls{io}:
 
 \definecolor{SafetyColor}{HTML}{FFDDC1}
 \definecolor{PowerColor}{HTML}{C1E1FF}
@@ -61,7 +61,7 @@ Le contrôleur du bras robot offre plusieurs types d'IO:
     \textbf{Connexions :} GND | AI0 | GND | AI1 | GND | AO0 | GND | AO1
 \end{tcolorbox}
 
-Ces IO premettent la communication avec des éléments externes.
+Ces \gls{io} permettent la communication avec des éléments externes.
 
 \section{AICA Studio}
 AICA Studio est un logiciel qui simplifie l'intégration et la programmation de robots industriels via des blocs de fonctions prédéfinis. Il est compatible avec le bras robot Ufactory Xarm6 et permet de créer des programmes de manière visuelle, sans nécessiter de compétences avancées en programmation. Le logiciel s'appuie sur \gls{ros2}, qui gère les aspects bas-niveau du contrôle et de la communication, tandis que AICA, en tant que couche supérieure, propose une interface simplifiée pour la gestion des tâches complexes, telles que la planification de trajectoires ou l'intégration d'opérations avancées comme la détection de collisions ou le contrôle du robot avec l'interface \gls{rviz}.
@@ -80,7 +80,7 @@ Le démarrage de AICA Studio suit la procédure strandart des applications Linux
 \end{figure}
 
 \subsection{Interface de AICA Studio}
-Le logiciel est relativement intuitif et facile à prendre en main pour ce qui est de la création de programmes et la connexion des blocs fonctionnels. Cependant à l'heure actuelle, il est nécesasire de comprendre et de maitriser des concepts de base de la programmation avec \gls{ros2} pour pouvoir comprendre et utiliser les différentes possibilités offertes par le logiciel. Il est donc recommandé de suivre les tutoriels et la documentation fournis par AICA ainsi que les ressources en ligne pour se familiariser avec les concepts de base de \gls{ros2} avant de se lancer dans la création de programmes.
+Le logiciel est relativement intuitif et facile à prendre en main pour ce qui est de la création de programmes et la connexion des blocs fonctionnels. Cependant à l'heure actuelle, il est nécessaire de comprendre et de maitriser des concepts de base de la programmation avec \gls{ros2} pour pouvoir comprendre et utiliser les différentes possibilités offertes par le logiciel. Il est donc recommandé de suivre les tutoriels, la documentation fournis par AICA ainsi que les ressources en ligne pour se familiariser avec les concepts de base de AICA studio avant de se lancer dans la création de programmes.
 
 Il est possible de créer des programmes de deux manières différentes avec AICA Studio :
 \begin{itemize}
@@ -107,6 +107,11 @@ Il est possible de créer des programmes de deux manières différentes avec AIC
     \label{fig:comparaison_yaml_visuel}
 \end{figure}
 
+Ces deux approches ont chacune leurs avantages et inconvénients.
+D'une part la programation visuelle ne nécessite pas de connaissances particulières dans la syntaxe et la structure des langages de programmation. de plus, les liens entre les blocs sont clairs et permette de visualiser rapidement le fonctionnement du programme. Néanmoins, la programmation visuelle ne permet pas d'avoir de vision très fine du programme. Les réglages et les paramètres des blocs doivent être effectués via chaque menu de chaque bloc ce qui peut vite devenir long et fastidieux.
+
+Concernant la programation par le langage \gls{yaml}, elle permet d'accéder au réglages du programme directement et de manière plus globale. Par contre, Il est nécessaire d'avoir de bonne bases dans le langage et un bon contrôle de la syntaxe pour éviter les erreurs.
+
 Concernant le reste de l'interface, le logiciel contient :
 
 % Liste textuelle des éléments
@@ -117,7 +122,6 @@ Concernant le reste de l'interface, le logiciel contient :
     \item Des boutons d'actions pour le démarrage, l'arrêt et le rechargement du programme (voir d).
 \end{itemize}
 
-% Figure avec sous-figures légendées
 \begin{figure}[H]
     \centering
     \begin{tabular}{cc}
@@ -154,7 +158,7 @@ Concernant le reste de l'interface, le logiciel contient :
 Ces éléments permettent de naviguer facilement dans l'application et d'accéder aux différentes fonctionnalités. L'interface est conçue pour être intuitive et facile à utiliser. malgré les limitations actuelles du logiciel et la nécessité de comprendre les concepts de base de \gls{ros2} ainsi que les premières versions de AICA Studio, l'interface utilisateur est à présent agréable à utiliser.
 
 \section{Limites}
-Bien que la station de gravure laser intelligente réponde aux besoins initiaux du projet, certaines limites ont été identifiées :
+Bien que la station de gravure laser intelligente réponde aux besoins initiaux du projet, certaines limites ont été identifiées:
 \begin{itemize}
     \item \textbf{Dépendance logicielle} : Le système repose sur des logiciels propriétaires (AICA Studio, UFACTORY) qui peuvent évoluer ou devenir obsolètes.
     \item \textbf{Sécurité publique} : Malgré les mesures prévues, la sécurité en contexte public dépend fortement de la vigilance de l'opérateur.
