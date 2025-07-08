@@ -176,7 +176,7 @@ Dans ce projet, il n'a pas été nécessaire de réaliser une calibration manuel
 Afin de faire fonctionner les différents blocs fonctionnels développés, il est donc nécessaire de les intégrer dans AICA Studio. A l'aide de blocs de base du logiciel et de certains blocs fournis après coup par l'entreprise, il a été possible de créer un programme qui relie tous les éléments de la maquette ensemble.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_main_app.png}
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_PROG.png}
     \caption{Programme AICA Studio de la maquette de la graveuse laser intelligente}
     \label{fig:aica_programme}
 \end{figure}
@@ -196,11 +196,11 @@ Certains de ces blocs ou groupes de blocs on déjà étés expliqués ci-dessus,
 
 \subsection{Bloc du bras robot}
 
-Le bloc du bras robot est ce qui permet la communication entre le programme et les différents acctionneurs du robot. Avec plusieurs option de controllers, il est possible de piloter le robot de plusieurs manières différentes (mais pas en même temps). Dans le cas de la maquette, c'est un contrôle de vélocité et un contrôle de trajectoire qui sont utilisés. Le bloc permet également de gérer l'ouverture et la fermeture de la pince.
+Le bloc du bras robot est ce qui permet la communication entre le programme et les différents actionneurs du robot. Avec plusieurs options de contrôleurs, il est possible de piloter le robot de plusieurs manières différentes (mais pas en même temps). Dans le cas de la maquette, ce sont un contrôle de vélocité et un contrôle de trajectoire qui sont utilisés. Le bloc permet également de gérer l'ouverture et la fermeture de la pince.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Hardware_interface.png}
     \caption{Bloc du bras robot dans AICA Studio}
     \label{fig:robot_block}
 \end{figure}
@@ -217,16 +217,16 @@ Dans le cas des sorties d'états du robot, toutes ne sont pas utilisées dans ce
 
 \subsection{Bloc de séquence}
 
-Le bloc de séquence est utilisé dans la seconde partie du programme. Il sert à traiter des événements tel que des déplacements ainsi que donner et reçevoir des signaux.
+Le bloc de séquence est utilisé dans la seconde partie du programme. Il sert à traiter des événements tel que des déplacements ainsi que l'envoi et la réceptiond de signaux.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Sequence (2).png}
     \caption{Bloc de séquence dans AICA Studio}
     \label{fig:sequence_block}
 \end{figure}
 
-Dans ce cas, le bloc de séquence est activé après que le robot ait saisi la pièce. Dans un premier temps, un délai d'une seconde est appliqué pour laisser le temps à l'un des contrôleur du robot de se désactiver. ensuite le signal est donné au second contrôleur de s'activer et un second délais est laissé. Ensuite, pour faciliter la compréhension du programme, toutes les connexions qui vont au même endroit sont sur la même ligne. On peut donc voir que le quatrième élément de la séquence est une commande de position. D'autres commandes de positions sont alors identifiables en septième et dixième position. Le cinquième élément lui, est un signal venant du robot qui ne s'active que quand le robot à fini de se déplacer. Cela permet de contrôler le déroulement de la séquence en mettant des points de vérifications dans le cas ou un mouvement ne se passe pas comme prévu. Les éléments 8 et 11 sont aussi des retours. Le sixième élémeent est un signal qui va directement dans le bloc d'interface avec la graveuse laser. C'est lui qui s'occupe de démarrer la graveuse laser. L'élément 9 est un signal de retour venant du bloc d'interface de la graveuse laser. Il est utilisé pour savoir si la graveuse a fini de graver ou non. Ensuite le douzième élément est un signal envoyé au bloc robot pour ouvrir la pince. Pour terminer, les trois derniers éléments remettent le programme dans sa position de départ, en désactivant le contrôleur utilisé par la séquence et en réactivant le contrôleur utilisé pour la prise de la pièce.
+(partie à modifier) Dans ce cas, le bloc de séquence est activé après que le robot ait saisi la pièce. Dans un premier temps, un délai d'une seconde est appliqué pour laisser le temps à l'un des contrôleur du robot de se désactiver. ensuite le signal est donné au second contrôleur de s'activer et un second délais est laissé. Ensuite, pour faciliter la compréhension du programme, toutes les connexions qui vont au même endroit sont sur la même ligne. On peut donc voir que le quatrième élément de la séquence est une commande de position. D'autres commandes de positions sont alors identifiables en septième et dixième position. Le cinquième élément lui, est un signal venant du robot qui ne s'active que quand le robot à fini de se déplacer. Cela permet de contrôler le déroulement de la séquence en mettant des points de vérifications dans le cas ou un mouvement ne se passe pas comme prévu. Les éléments 8 et 11 sont aussi des retours. Le sixième élément est un signal qui va directement dans le bloc d'interface avec la graveuse laser. C'est lui qui s'occupe de démarrer la graveuse laser. L'élément 9 est un signal de retour venant du bloc d'interface de la graveuse laser. Il est utilisé pour savoir si la graveuse a fini de graver ou non. Ensuite le douzième élément est un signal envoyé au bloc robot pour ouvrir la pince. Pour terminer, les trois derniers éléments remettent le programme dans sa position de départ, en désactivant le contrôleur utilisé par la séquence et en réactivant le contrôleur utilisé pour la prise de la pièce. (partie à modifier)
 
 \subsection{Blocs de gestion de prise de pièce}
 
@@ -234,7 +234,7 @@ Les blocs de gestion de prise de la pièce sont divisées en deux parties qui fo
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/img_a_venir.png}
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Prise (2).png}
     \caption{Blocs de gestion de prise de pièce dans AICA Studio}
     \label{fig:piece_block}
 \end{figure}
@@ -260,5 +260,17 @@ Les blocs de verification et d'avortement sont des éléments de sécurité ajou
 
 On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arreter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste attends la validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
 
+\subsection{Programmation des mouvements}
 
+Afin de pouvoir faire bouger le robot dans le bloc de séquence, il est nécessaire d'envoyer un \gls{payload} au robot. Ce bout de code est ensuite déchiffré par le bloc du robot et traduis en mouvements.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_payload.png}
+    \caption{Bloc de programmation des mouvements dans AICA Studio}
+    \label{fig:payload_block}
+\end{figure}
+
+Dans ce cas, la liste des mouvements est données en premier sous forme de positions articulaires. Ensuite, les chiffres correspondent au moment ou chaque position doit être atteinte. Cette approche permet de contrôler précisément le temps total de la séquence mais rend toute modification compliquée. En effet, si l'on souhaite modifier la durée d'un mouvement, il faut recalculer tous les mouvements suivants pour que le robot arrive à la bonne position au bon moment. Cela peut être un inconvénient si l'on souhaite faire des modifications fréquentes ou pendant la phase de test. Néanmoins, dans une mise à jour récente, la possibilité de modifier la durée de chaque mouvement indépendament des autres a été ajoutée.
+
+Il est aussi possible de donner des points dans l'espace avec une orientation plutôt qu'une configuration articulaire fixe. Cette possibilité est plus simple à mettre en place mais est utile pour des positions et mouvements moins exigeants que ceux programmés dans le projet. Le bras robot possédant deux axes pouvants tourner à plus que 360 degrés, il se retrouvais régulièrement dans des situations ou les axes étaients proche des limites de leur rotation. Cela rendait le robot imprévisible et menais à des erreurs aléatoires qui bloquaient le système.
