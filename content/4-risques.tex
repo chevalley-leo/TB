@@ -22,19 +22,19 @@ L'utilisation d'une station de gravure laser intelligente avec un bras robotisé
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.4}
-    \begin{tabular}{|p{3.5cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|p{3.5cm}|}
+    \begin{tabular}{|c|p{3.5cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|p{3.5cm}|}
         \hline
-        \textbf{Risque} & \textbf{Sévérité} & \textbf{Fréquence} & \textbf{Importance} & \textbf{Description} \\
+        \textbf{N°} & \textbf{Risque} & \textbf{Sévérité} & \textbf{Fréquence} & \textbf{Importance} & \textbf{Description} \\
         \hline
-        Collision avec un utilisateur & \cellcolor{orange!60}Moyenne & \cellcolor{yellow!60}Faible & \cellcolor{orange!60}Moyenne & Blessure possible en cas de contact entre le bras robot et une personne. \\
+        1 & Collision avec un utilisateur & \cellcolor{orange!60}Moyenne & \cellcolor{yellow!60}Faible & \cellcolor{orange!60}Moyenne & Blessure possible en cas de contact entre le bras robot et une personne. \\
         \hline
-        Pincement lors du mouvement & \cellcolor{green!60}Très Faible & \cellcolor{yellow!60}Faible & \cellcolor{yellow!60}Faible & Risque de pincement des doigts ou de la main lors des mouvements du robot, notamment avec la pince. \\
+        2 & Pincement lors du mouvement & \cellcolor{green!60}Très Faible & \cellcolor{yellow!60}Faible & \cellcolor{yellow!60}Faible & Risque de pincement des doigts ou de la main lors des mouvements du robot, notamment avec la pince. \\
         \hline
-        Mauvaise préhension de la pièce & \cellcolor{yellow!60}Faible & \cellcolor{red!60}Élevée & \cellcolor{orange!60}Moyenne & Le robot peut mal saisir la pièce, entraînant des erreurs de positionnement et des comportements imprévus. \\
+        3 & Mauvaise préhension de la pièce & \cellcolor{yellow!60}Faible & \cellcolor{red!60}Élevée & \cellcolor{orange!60}Moyenne & Le robot peut mal saisir la pièce, entraînant des erreurs de positionnement et des comportements imprévus. \\
         \hline
-        Mouvement imprévu suite à une erreur logicielle & \cellcolor{yellow!60}Faible & \cellcolor{green!60}Très faible & \cellcolor{yellow!60}Faible & Un bug logiciel peut entraîner un déplacement non anticipé du robot. \\
+        4 & Mouvement imprévu suite à une erreur logicielle & \cellcolor{yellow!60}Faible & \cellcolor{green!60}Très faible & \cellcolor{yellow!60}Faible & Un bug logiciel peut entraîner un déplacement non anticipé du robot. \\
         \hline
-        Défaillance du système de sécurité & \cellcolor{red!60}Élevée & \cellcolor{green!60}Très faible & \cellcolor{orange!60}Moyenne & Si les dispositifs de sécurité ne fonctionnent pas, le robot peut devenir dangereux. \\
+        5 & Défaillance du système de sécurité & \cellcolor{red!60}Élevée & \cellcolor{green!60}Très faible & \cellcolor{orange!60}Moyenne & Si les dispositifs de sécurité ne fonctionnent pas, le robot peut devenir dangereux. \\
         \hline
     \end{tabular}
     \caption{Tableau d'analyse des risques robotiques pour le bras Ufactory Xarm6 dans le cadre de l'utilisation de la station de gravure laser intelligente.}
@@ -45,12 +45,11 @@ Cette analyse permet de mettre en place des mesures de sécurité pour la statio
 
 \subsection{Mesures de prévention et de maîtrise}
 \begin{itemize}
-    \item Mise en place de protections physiques (capot, barrières) autour de la zone de gravure. (à mettre en place)
-    \item Activation du laser uniquement lorsque le robot est en position sécurisée et la zone libre.
-    \item Surveillance logicielle de la synchronisation robot/laser et gestion des erreurs critiques.
-    \item Validation logicielle de la détection de pièce et limitation des mouvements du robot en cas d'incertitude.
-    \item Présence d'un opérateur formé lors des démonstrations publiques.
-    \item Ajout d'une vérification de prise de pièce via une caméra.
+    \item \textbf{Pour le risque 1 (Collision avec un utilisateur)~:} Mise en place de protections physiques (capot, barrières) autour de la zone de gravure. (à mettre en place)
+    \item \textbf{Pour le risque 2 (Pincement lors du mouvement)~:} Présence d'un opérateur formé lors des démonstrations publiques et limitation des accès à la zone robotisée.
+    \item \textbf{Pour le risque 3 (Mauvaise préhension de la pièce)~:} Ajout d'une vérification de prise de pièce via une caméra et validation logicielle de la détection de pièce.
+    \item \textbf{Pour le risque 4 (Mouvement imprévu suite à une erreur logicielle)~:} Surveillance logicielle de la synchronisation robot/laser et gestion des erreurs critiques.
+    \item \textbf{Pour le risque 5 (Défaillance du système de sécurité)~:} Activation du laser uniquement lorsque le robot est en position sécurisée et la zone libre, et ajout d'un arrêt d'urgence.
 \end{itemize}
 
 Ces mesures permettent de réduire significativement les risques identifiés, en garantissant un fonctionnement sécurisé et fiable de la station de gravure laser intelligente.

@@ -11,7 +11,7 @@ La qualité de la gravure dépend fortement de la précision du dessin initial e
 
 \section{Performance de la détection}
 
-La détection de la pièce par la caméra fonctionne correctement dans la plupart des cas. Cependant, certains facteurs comme la couleur de la peau de l'utilisateur ou un éclairage trop variable peuvent perturber l'algorithme. Sur 20 essais, 17 ont réussi, soit un taux de réussite de 85\%. Les échecs sont principalement dus à des conditions lumineuses défavorables ou à une confusion entre la couleur de la pièce et celle de la main.
+La détection de la pièce par la caméra fonctionne correctement dans la plupart des cas. Cependant, certains facteurs comme la couleur de la peau de l'utilisateur ou un éclairage différent de celles des conditions de laboratoire peuvent perturber l'algorithme. Sur 20 essais, 17 ont réussi, soit un taux de réussite de 85\%. Les échecs sont principalement dus à des conditions lumineuses défavorables ou à une confusion entre la couleur de la pièce et celle de la main.
 Dans le cas de l'utilisation de la machine avec des gants, le taux de réussite s'élève à 95\%, car la couleur du gant est différente de celle de la pièce. Cette fois-ci, c'est la prise de la pièce qui pose problème. En effet, parfois, le robot cherche à prendre la pièce trop loin ou trop court. Cela mène à un positionnement incorrect que le robot n'arrive pas à corriger dans la séquence suivante.
 
 \section{Robustesse et sécurité}
@@ -22,14 +22,13 @@ Le système réagit bien en cas d'erreur : si la pièce n'est pas détectée ou 
 
 Certaines limites ont été identifiées lors des tests :
 \begin{itemize}
-    \item La détection de la pièce reste sensible à la couleur et à l'éclairage.
     \item Les dessins ne sont pas toujours bien reproduits.
     \item Le temps de gravure peut varier selon la complexité du motif.
     \item La taille des pièces est fixe et ne peut être modifiée qu'avec une grosse mise à jour logicielle.
 \end{itemize}
 
 \subsection{Détection des pièces}
-Comme mentionné dans le \textbf{chapitre \ref{chap:utilisation}}, la détection des pièces est l'une des parties les plus sensibles du système. Testé en laboratoire avec un éclairage plutôt constant. Une garantie de fonctionnement dans un autre environnement n'est pas garanti. Pour pallier à ce problème, un éclairage a été conçu avec des LED RGB qui afin de permettre une utilisation tant comme un éclairage pour la détection que pour la signalisation des états du robot. Cependant, par manque de temps sur le projet, le système n'as pas pu être implémenté. Le système physique est tout de même disponible et prêt à l'emploi dans l'objectif d'une amélioration future.
+Comme mentionné dans le \textbf{chapitre \ref{chap:utilisation}}, la détection des pièces est l'une des parties les plus sensibles du système. Testé en laboratoire avec un éclairage plutôt constant. Le fonctionnement dans un autre environnement n'est pas garanti. Pour pallier à ce problème, un éclairage avec des LED RGB a été conçu afin de permettre une utilisation tant comme un éclairage pour la détection que pour la signalisation des états du robot. Cependant, par manque de temps sur le projet, le système n'as pas pu être implémenté. Le système physique est tout de même disponible et prêt à l'emploi dans l'objectif d'une amélioration future.
 
 \begin{figure}[H]
     \centering
@@ -40,7 +39,7 @@ Comme mentionné dans le \textbf{chapitre \ref{chap:utilisation}}, la détection
 
 
 \subsection{Dessins}
-Lors des test de la maquette, il a été remarqué que certaines pièces étaient mal gravées. Parfois, avec le même dessin envoyé à la graveuse, le résultat n'était pas le même. Cela est dû au programme de conversion du dessin en G-code. En effet, le programme utilise un algorithme de simplification des courbes et peut parfois interpréter une courbe de manière différente d'un essai à l'autre, entraînant des erreurs de gravure.
+Lors des test de la maquette, il a été remarqué que certaines pièces étaient mal gravées. Parfois, avec le même dessin envoyé à la graveuse, le résultat n'était pas le même. Cela est dû au programme de conversion du dessin en G-code qui utilise un algorithme de simplification des courbes, et peut entrainer des erreurs de gravure.
 
 \subsection{Temps de gravure}
 Selon la taille du dessin envoyé à la graveuse, le temps de gravure peut varier. Au début du projet ce temps variable était un problème car le robot n'avait pas de retour de la graveuse. Un temps prédéfini avait donc été mis en place pour attendre la fin de la gravure. Cependant, ce temps était trop long pour les petits dessins et trop court pour les grands dessins. Pour pallier à ce problème, un retour de la graveuse a été implémenté dans le programme. Ce retour permet au robot de savoir quand la gravure est terminée et de reprendre le processus. Un temps de sécurité entre le retour de la graveuse et la remise en mouvement du robot a tout de même été ajouté dans le but de s'assurer que la gravure est bien terminée avant de reprendre le processus.
@@ -50,5 +49,5 @@ Bien que le projet avait pour but de pouvoir traiter plusieurs formes et tailles
 
 \section{Retours utilisateurs}
 
-Les utilisateurs ayant testé la station ont apprécié la simplicité de l'interface tactile et la rapidité du processus. Quelques remarques ont été faites concernant la nécessité de bien positionner la pièce. Globalement, l'expérience utilisateur est jugée positive et amusante.
+Les utilisateurs ayant testé la station ont apprécié la simplicité de l'interface tactile et la rapidité du processus. Quelques remarques ont été faites concernant la nécessité de bien positionner la pièce. Globalement, l'expérience utilisateur est jugée positive et amusante. D'autres tests pourraient être réalisés par des utilisateurs non familiers avec la robotique et le domaine technique en général. Cela permettrait d'avoir un retour plus général sur l'expérience utilisateur et de voir si des améliorations sont nécessaires pour rendre la station plus accessible au public visé.
 

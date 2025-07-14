@@ -36,19 +36,21 @@ Le déroulement de l'utilisation de la station de gravure laser intelligente se 
     \label{fig:etat_utilisation}
 \end{figure}
 
+\textit{Note : L'étape de dessin sur l'écran tactile est indépendante du reste du processus. Si aucun nouveau dessin n'est réalisé, la machine utilisera simplement le dernier motif envoyé. Il n'est donc pas nécessaire de dessiner à chaque cycle d'utilisation.}
+
 \section{Ecran tactile}
 
 L'écran tactile est l'interface principale entre le robot et l'utilisateur. Il permet de dessiner les motifs à graver et de les envoyer.
 
 \subsection{Démarrage de l'écran tactile}
 
-Lors de la mise sous tension de la maquette, l'écran tactile démarre automatiquement. Cependant, il est nécessaire de lancer manuellement l'application de dessin. Pour ce faire, il suffit de cliquer sur l'icône correspondant sur l'écran d'accueil. L'application se lance alors et l'utilisateur peut commencer à dessiner.
+Lors de la mise sous tension de la maquette, l'écran tactile démarre automatiquement. Cependant, il est nécessaire de lancer manuellement l'application de dessin en cliquant sur l'icône correspondant sur l'écran d'accueil.
 
-Grace à l'interface graphique développée pour l'écran tactile, l'utilisateur peut dessiner librement ce qu'il souhaite graver. A l'aide de formes prédifinies et le mode à main levée, il est possible de créer des formes et dessins variés. L'interface est claire et intuitive, permettant à l'utilisateur d'utiliser l'écran sans explications préalables.
+Grace à une interface graphique claire et intuitive, l'utilisateur peut dessiner librement ce qu'il souhaite graver. A l'aide de formes prédifinies et le mode à main levée, il est possible de créer des formes et dessins variés.
 
 \subsection{Interface graphique}
 
-L'interface graphique est présentée comme suit :
+L'interface graphique est présentée en figure \ref{fig:interface_graphique}:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/figures/Draw_app.png}
@@ -56,36 +58,36 @@ L'interface graphique est présentée comme suit :
     \label{fig:interface_graphique}
 \end{figure}
 
-Les codes couleurs utilisés permettent de rapidement identifier les actions possibles.
+Les codes couleurs utilisés permettent d'identifier rapidement les actions possibles.
 
 Le logo de la HEIG-VD est affiché de base sur l'application car il est gravé par défaut sur la plaque. Il n'est pas possible de supprimer le logo sans devoir modifier le code source de l'application. Cependant, il est possible de le remplacer par un autre logo en modifiant le fichier image utilisé dans le code source.
 
 
 \section{AICA Studio}
-Pour démarrer entièrement la maquette, il est nécessaire de démarrer le programme principal dans AICA Studio. Pour se faire, il suffit simplement de démarrer le logiciel conformément à la procédure standart linux, cliquer sur l'application voulue et appuyer sur "start". Après cela, l'application tournera en boucle tant que le bouton "Stop" n'est pas pressé.
+Pour démarrer entièrement la maquette, il est nécessaire de démarrer le programme principal dans AICA Studio. Pour se faire, il suffit de démarrer le logiciel, cliquer sur le programme voulu et appuyer sur "start". Après cela, l'application tournera en boucle tant que le bouton "Stop" n'est pas pressé.
 
 \section{Prise de la pièce}
 
-Après avoir dessiné et validé le dessin, l'utilisateur peut donner la pièce au robot. Le robot est constamment en attente d'une pièce à prendre. C'est à dire que dès qu'une pièce est détectée dans le zone de prise, le robot se déplacera pour la prendre. Il est important de noter que le programme ne vérifie pas si un nouveau dessin a été fait avant de prendre la pièce. Il est donc possible de donner une pièce au robot sans avoir dessiné au préalable. Le robot utilisera donc le dernier dessin envoyé au programme.
+Après avoir dessiné et validé le dessin, l'utilisateur peut donner la pièce au robot. Le robot est constamment en attente d'une pièce à prendre. Dès qu'une pièce est détectée dans le zone de prise, le robot se déplace pour la prendre. Il est important de noter que le programme ne vérifie pas si un nouveau dessin a été fait avant de prendre la pièce. Il est donc possible de donner une pièce au robot sans avoir dessiné au préalable, et la graveuse utilisera le fichier déjà en mémoire correspondant au dernier dessin envoyé.
 
 \subsection{Prérequis}
 
 Le programme est conçu pour prendre la pièce uniquement dans des conditions spécifiques afin d'assurer la sécurité et la fiabilité du processus. Ces conditions sont les suivantes :
 \begin{itemize}
     \item La pièce doit être placée dans la zone de prise du robot.
-    \item La pièce doit être détectée par le bloc de détection, selon plusieurs critères :
-          \begin{itemize}
+    \item La pièce doit être détectée par le bloc de détection, selon les critères suivants :
+          \begin{enumerate}
               \item La couleur de la pièce doit correspondre à celle définie dans le bloc fonctionnel de la caméra.
               \item La taille de la pièce doit être ni trop grande ni trop petite.
-              \item La pièce doit correspondre au modèle 3D à un certain pourcentage.
-          \end{itemize}
+              \item La pièce doit correspondre au modèle 3D à un certain niveau de confiance.
+          \end{enumerate}
 \end{itemize}
 
 Tous ces paramètres sont vérifiés par le programme avant de prendre la pièce. Si l'une de ces conditions n'est pas remplie, le robot ne prendra pas la pièce et restera en position d'attente. Dans le cas ou le robot est sur le point de prendre la pièce et que celle-ci n'est pas détectée, le robot retournera en position d'attente.
 
 \subsection{Inconvénients}
 
-A cause de la complexité de la détection de la pièces, des règles de détection et de la couleur de la pièce, il est possible que le programme ne détecte pas correctement la pièce du fait de la couleur de peau de l'utilisateur. En effet, comme expliqué précédement, une partie du traitement de l'image utilise la couleur de la pièce pour isoler le nuage de points correspondant à la pièce. Si la couleur de peau de l'utilisateur est proche de celle de la pièce, le programme risque de ne pas détecter correctement la pièce. Il est donc parfois obligatoire de porter des gants de couleur différente de celle de la pièce pour que le robot puisse prendre la pièce correctement.
+Comme expliqué précédement, une partie du traitement de l'image utilise la couleur de la pièce pour isoler le nuage de points correspondant à la pièce avant de procéder à la recherche de la forme. Cependant, si la couleur de peau de l'utilisateur est proche de celle de la pièce, le programme risque de ne pas détecter correctement la pièce. Il est donc parfois obligatoire de porter des gants de couleur différente de celle de la pièce pour que le robot puisse prendre la pièce correctement.
 
 \begin{figure}[H]
     \centering
@@ -119,9 +121,9 @@ Lorsque la pièce est tendue au robot par l'utilisateur dans les bonnes conditio
 
 \section{Gravure de la pièce}
 
-La gravure de la pièce se fait automatiquement après la prise de celle-ci. Le robot se déplace alors vers la zone de gravure et commence à graver le dessin précédemment dessiné par l'utilisateur.
-La gravure se fait dans l'ordre de dessin sur l'écran et non dans l'ordre le plus optimisé. Cela aurait demandé une programmation différente et plus complexe. De plus, la gravue étant très petite, le temps économisé n'aurait pas été significatif.
+La gravure de la pièce se fait automatiquement après la prise de celle-ci. Le robot se déplace alors vers la zone de gravure et la graveuse laser commence à graver le dessin précédemment dessiné par l'utilisateur.
+La gravure se fait dans l'ordre de dessin sur l'écran et non dans l'ordre le plus optimisé. De plus, la gravure étant très petite, le temps économisé n'aurait pas été significatif.
 
 \section{Retour de la pièce}
 
-Lorsque le robot a fini de graver la pièce, il retourne la pièce à l'utilisateur en la lachant au dessus de la boîte prévue à cet effet.
+Lorsque le robot a fini de graver la pièce, il retourne la pièce à l'utilisateur en la lâchant au dessus de la boîte prévue à cet effet.

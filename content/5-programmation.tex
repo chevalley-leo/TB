@@ -1,9 +1,9 @@
 \chapter{Programmation}
 \label{chap:programmation}
 
-La plupart des scripts étant conçu pour fonctionner dans AICA Studio et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que telle.
+La plupart des scripts étant conçus pour fonctionner dans AICA Studio et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que telle.
 
-Ainsi, la plupart des programmes et blocs fonctionnels ont d'abord été développés et testés en Python de façon indépendante, sans intégration directe à AICA Studio. Cette approche a permis de valider les algorithmes et le fonctionnement général dans un environnement plus simple et maîtrisé.
+Ainsi, la plupart des programmes et blocs fonctionnels ont d'abord été développés et testés en Python de façon indépendante, sans intégration directe à AICA Studio. Cette approche a permis de valider les algorithmes et le fonctionnement général dans un environnement plus simple et maîtrisé. Les scripts on ensuite été adaptés pour fonctionner dans des blocs fonctionnels AICA Studio. Les blocs fonctionnels pouvant être écris en python, l'intégration n'était pas très complexe mais la décision de faire étape par étape a permis de gagner du temps la preuve de concept et a permis d'éviter des erreurs.
 
 Dans un second temps, quand le développement a été finalisé, l'intégration dans l'environnement AICA Studio a été réalisée. Cette étape a consisté à adapter les scripts pour qu'ils fonctionnent avec l'architecture \gls{ros2} imposée par AICA Studio, en veillant à la compatibilité des communications et à l'intégration des blocs fonctionnels dans le système global.
 
@@ -20,7 +20,7 @@ L'écran tactile ED101 est le seul élément de la maquette qui n'est pas direct
 \end{figure}
 
 \section{Graveuse laser}
-Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel AICA Studio, un bloc fonctionnel a été développé afin de :
+Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel AICA Studio, un bloc fonctionnel a été développé avec \gls{ezdxf} \cite{DXFDocs} afin de :
 \begin{itemize}
     \item Charger un fichier DXF.
     \item Convertir le fichier DXF en G-code.
@@ -35,11 +35,15 @@ Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel AICA Studi
     \label{fig:laser_interface}
 \end{figure}
 
-Le bloc fonctionnel offre une certaine liberté dans le choix du nom du fichier DXF. Cependant, dans le cadre du projet, le nom de fichier est toujours le même. Le script de récupération s'occupe de remplacer le fichier quand un plus récent est reçu.
+On peut voir en haut à gauche un signal d'entrée pour le chargement du bloc fonctionnel. Ce signal est utilisé en début de programme sur tous les blocs fonctionnels pour initialiser les paramètres nécessaires. Il permet également de désactiver et d'activer le bloc pendant l'exécution du programme. En bas à gauche, le signal d'entrée \texttt{Run gcode file} est utilisé pour charger le fichier DXF à graver. Au centre à droite, le signal de sortie \texttt{Laser Finished} permet de savoir quand la graveuse à terminé de graver la pièce.
+
+
+
+
 
 \section{Caméra}
 
-La caméra Intel D435 est intégrée dans le système via un bloc fonctionnel personnalisé développé dans AICA Studio. Ce bloc utilise les données de profondeur captées par la caméra pour détecter la position des pièces à graver et adapter la trajectoire du bras robot en conséquence.
+La caméra Intel D435 est intégrée dans le système via un bloc fonctionnel personnalisé développé dans AICA Studio. Ce bloc utilise les données de profondeur captées par la caméra pour détecter la position des pièces à graver.
 Afin d'obtenir un retour de données rapide, le code est optimisé pour minimiser le temps de traitement et permettre une mise a jour toutes les 300ms. Le but est d'envoyer le robot à la position de la pièce à prendre et de corriger la trajectoire toutes les 300ms.
 Le programme fonctionne selon les étapes suivantes :
 \begin{figure}[H]
@@ -94,7 +98,7 @@ Le programme fonctionne selon les étapes suivantes :
     \label{fig:sequence_camera_illustre}
 \end{figure}
 
-Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la caméra offre une certaine liberté dans les paramètres de traitement. Il est par exemple possible de choisir la couleur de la pièce à détecter, modifier le modèle ainsi que le nombre de points de ce dernier. Cette flexibilité permet d'adapter le système tant dans la pièce à détecter que dans la rapidité de traitement. D'autres réglages sont aussi disponibles.
+Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la caméra offre une certaine liberté dans les paramètres de traitement. Il est par exemple possible de choisir la couleur de la pièce à détecter, modifier le modèle ainsi que le nombre de points de ce dernier. Cette flexibilité permet d'adapter le système tant dans la forme de la pièce à détecter que dans la rapidité de traitement. D'autres réglages sont aussi disponibles.
 
 \begin{figure}[H]
     \centering
@@ -103,7 +107,11 @@ Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la c
     \label{fig:camera_interface}
 \end{figure}
 
+Ici, les entrées sont principalement des entrées de chargement en début de programme. Concernant les sorties, le bloc \texttt{Realsense\_Camera} envoie en entrée au bloc \texttt{Piece\_Detection} le nuage de points, les couleurs correspondantes et les informations du nuage de points. Le bloc \texttt{Piece\_Detection} utilise ces données pour détecter la pièce et publier sa position et son orientation dans le repère du robot. Les autres sorties du bloc \texttt{Piece\_Detection} permettent d'activer ou desactiver les blocs d'approche ou de retour en positon de base en fonction de la confirmation ou non de la bonne détection de la pièce.
+
 \subsection{Transformation du repère caméra au repère robot}
+
+\sloppy
 
 Pour obtenir la position de la pièce détectée dans le repère du robot (ou du monde), le programme effectue une composition de transformations :
 
@@ -112,16 +120,11 @@ Pour obtenir la position de la pièce détectée dans le repère du robot (ou du
           \begin{itemize}
               \item La position de la pièce est estimée en superposant le centroïde du modèle 3D (référence) et celui de la pièce détectée dans l'image. Cette position est donc exprimée dans le repère de la caméra.
               \item La rotation de la pièce est déterminée en testant différentes orientations (rotation degré par degré autour de chaque axe) et en cherchant celle qui aligne au mieux le modèle 3D avec la pièce détectée. Cette rotation est également exprimée dans le repère de la caméra.
-
-              \inputminted[firstline=176, lastline=181, fontsize=\small, linenos, frame=lines, breaklines, bgcolor=gray!10]{python}{assets/code/piece_detection.py}
-              \captionof{listing}{Rotation sur chaque axe pour trouver la meilleure orientation de la pièce dans le code python}
-              \label{lst:piece_detection}
-
           \end{itemize}
     \item \textbf{Transformation du repère caméra au repère monde (robot)} :
           \begin{itemize}
               \item La position et l'orientation de la caméra dans le repère monde (ou robot) sont connues et définies par une translation et un quaternion (paramètre \texttt{camera\_pose\_world}).
-              \item On construit la matrice de transformation homogène de la caméra dans le monde : $T_{\text{cam} \to \text{world}}$.
+              \item Avec cette information, on peut déterminer la matrice de transformation homogène de la caméra dans le monde : $T_{\text{cam} \to \text{world}}$.
           \end{itemize}
     \item \textbf{Calcul de la position finale de la pièce dans le monde} :
           \begin{itemize}
@@ -129,7 +132,7 @@ Pour obtenir la position de la pièce détectée dans le repère du robot (ou du
                     \[
                         T_{\text{piece} \to \text{world}} = T_{\text{cam} \to \text{world}} \cdot T_{\text{piece} \to \text{cam}}
                     \]
-              \item On obtient ainsi la position et l'orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s'y rendre précisément.
+              \item On obtient ainsi la position et l'orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s'y rendre.
           \end{itemize}
     \item \textbf{Implémentation dans le code} :
           \begin{itemize}
@@ -173,16 +176,18 @@ Dans ce projet, il n'a pas été nécessaire de réaliser une calibration manuel
 \end{minipage}
 
 \section{Programme AICA Studio}
-Afin de faire fonctionner les différents blocs fonctionnels développés, il est donc nécessaire de les intégrer dans AICA Studio. A l'aide de blocs de base du logiciel et de certains blocs fournis après coup par l'entreprise, il a été possible de créer un programme qui relie tous les éléments de la maquette ensemble.
+
+Cette section présente l'intégration des différents blocs fonctionnels développés. A l'aide de blocs de base du logiciel et de certains blocs fournis après coup par l'entreprise, il a été possible de créer un programme qui relie tous les éléments de la maquette ensemble.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_PROG.png}
+    \includegraphics[width=1\textwidth]{assets/figures/AICA_PROG.png}
     \caption{Programme AICA Studio de la maquette de la graveuse laser intelligente}
     \label{fig:aica_programme}
 \end{figure}
 
 On constate beaucoup d'éléments différents dans le programme, notamment :
-\begin{itemize}
+\begin{enumerate}
     \item Le bloc TCP de communication avec le PC de l'écran tactile.
     \item Le bloc de la graveuse laser qui permet de charger le fichier DXF et de lancer la machine
     \item Le bloc de la caméra qui permet de détecter la position de la pièce.
@@ -190,34 +195,34 @@ On constate beaucoup d'éléments différents dans le programme, notamment :
     \item Le bloc de séquence qui permet de gérer l'ordre d'exécution des différentes tâches lorsque le robot attrape une pièce.
     \item Les blocs de gestion de prise de pièce qui assurent une approche correcte et une préhension efficace.
     \item Les blocs de gestion de vérification de prise de pièce et d'avortement de la tâche en cours si nécessaire.
-\end{itemize}
+\end{enumerate}
 
 Certains de ces blocs ou groupes de blocs on déjà étés expliqués ci-dessus, d'autres serons détaillés dans les sections suivantes.
 
 \subsection{Bloc du bras robot}
 
-Le bloc du bras robot est ce qui permet la communication entre le programme et les différents actionneurs du robot. Avec plusieurs options de contrôleurs, il est possible de piloter le robot de plusieurs manières différentes (mais pas en même temps). Dans le cas de la maquette, ce sont un contrôle de vélocité et un contrôle de trajectoire qui sont utilisés. Le bloc permet également de gérer l'ouverture et la fermeture de la pince.
+Le bloc du bras robot permet la communication entre le programme et les différents actionneurs du robot. Plusieurs options de contrôleurs sont disponibles, permettant de piloter le robot en contrôle de vélocité ou de trajectoire (mais pas simultanément). Le bloc gère également l'ouverture et la fermeture de la pince.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Hardware_interface.png}
+    \includegraphics[height=0.8\textheight,keepaspectratio]{assets/figures/AICA_Hardware_interface.png}
     \caption{Bloc du bras robot dans AICA Studio}
     \label{fig:robot_block}
 \end{figure}
 
 On constate plusieurs entrées et sorties dans le bloc du bras robot qui se réunissent en trois types :
 \begin{itemize}
-    \item L'entrée d'activation ou de désactivation du bloc entiers.
+    \item L'entrée d'activation ou de désactivation du bloc entier.
     \item Les entrées de commande du robot.
     \item Les sorties d'états du robot.
 \end{itemize}
+Dans le cas des sorties d'états du robot, toutes ne sont pas utilisées dans ce projet et donc n'apparaissent pas sur l'illustration.
 
 
-Dans le cas des sorties d'états du robot, toutes ne sont pas utilisées dans ce projets et donc n'apparaissent pas sur l'illustration.
 
 \subsection{Bloc de séquence}
 
-Le bloc de séquence est utilisé dans la seconde partie du programme. Il sert à traiter des événements tel que des déplacements ainsi que l'envoi et la réceptiond de signaux.
+Le bloc de séquence est utilisé dans la seconde partie du programme. Il sert à traiter des événements tel que des déplacements ainsi que l'envoi et la réception de signaux.
 
 \begin{figure}[H]
     \centering
@@ -253,16 +258,18 @@ Les blocs de verification et d'avortement sont des éléments de sécurité ajou
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Abort_sequence.png}
+    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_abort_sequence.png}
     \caption{Blocs de vérification et d'avortement dans AICA Studio}
     \label{fig:verification_block}
 \end{figure}
 
-On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arreter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste attends la validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
+On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arrêter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste en attente de validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
 
 \subsection{Programmation des mouvements}
 
-Afin de pouvoir faire bouger le robot dans le bloc de séquence, il est nécessaire d'envoyer un \gls{payload} au robot. Ce bout de code est ensuite déchiffré par le bloc du robot et traduis en mouvements.
+Pour commander les mouvements du robot dans le bloc de séquence, il suffit de lui transmettre un \gls{payload} au format YAML décrivant la trajectoire souhaitée. Par exemple, on peut spécifier les positions articulaires à atteindre et les instants correspondants sous la forme suivante :
+\texttt{{joint\_positions: [jreposition\_1, jrepositionnement, jreposition\_5], times\_from\_start: [1, 2.5, 5]}}.
+Le bloc du robot interprète alors ce message et exécute la séquence de mouvements définie, en amenant le bras successivement à chaque position à l’instant indiqué.
 
 \begin{figure}[H]
     \centering
