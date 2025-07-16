@@ -115,30 +115,86 @@ Ici, les entrées sont principalement des entrées de chargement en début de pr
 
 Pour obtenir la position de la pièce détectée dans le repère du robot (ou du monde), le programme effectue une composition de transformations :
 
-\begin{enumerate}
-    \item \textbf{Détection de la pièce dans le repère caméra} :
-          \begin{itemize}
-              \item La position de la pièce est estimée en superposant le centroïde du modèle 3D (référence) et celui de la pièce détectée dans l'image. Cette position est donc exprimée dans le repère de la caméra.
-              \item La rotation de la pièce est déterminée en testant différentes orientations (rotation degré par degré autour de chaque axe) et en cherchant celle qui aligne au mieux le modèle 3D avec la pièce détectée. Cette rotation est également exprimée dans le repère de la caméra.
-          \end{itemize}
-    \item \textbf{Transformation du repère caméra au repère monde (robot)} :
-          \begin{itemize}
-              \item La position et l'orientation de la caméra dans le repère monde (ou robot) sont connues et définies par une translation et un quaternion (paramètre \texttt{camera\_pose\_world}).
-              \item Avec cette information, on peut déterminer la matrice de transformation homogène de la caméra dans le monde : $T_{\text{cam} \to \text{world}}$.
-          \end{itemize}
-    \item \textbf{Calcul de la position finale de la pièce dans le monde} :
-          \begin{itemize}
-              \item On compose la transformation de la pièce dans la caméra ($T_{\text{piece} \to \text{cam}}$) avec celle de la caméra dans le monde ($T_{\text{cam} \to \text{world}}$) :
-                    \[
-                        T_{\text{piece} \to \text{world}} = T_{\text{cam} \to \text{world}} \cdot T_{\text{piece} \to \text{cam}}
-                    \]
-              \item On obtient ainsi la position et l'orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s'y rendre.
-          \end{itemize}
-    \item \textbf{Implémentation dans le code} :
-          \begin{itemize}
-              \item Le code utilise la librairie \texttt{scipy.spatial.transform.Rotation} pour convertir les quaternions en matrices de rotation, et \texttt{numpy} pour manipuler les matrices de transformation.
-          \end{itemize}
-\end{enumerate}
+\subsubsection{Détection et rotation de la pièce dans le repère caméra}
+
+La position de la pièce est estimée en superposant le centroïde du modèle 3D (référence) et celui de la pièce détectée dans l'image. La rotation est déterminée en testant différentes orientations (rotation degré par degré autour de chaque axe) pour trouver celle qui aligne au mieux le modèle 3D avec la pièce détectée.
+
+\setlength{\belowcaptionskip}{0pt}
+\begin{listing}[H]
+    \inputminted{python}{assets/code/rotation.py}
+    \caption{Exemple de code pour la rotation de la pièce dans le repère caméra}
+\end{listing}
+La méthode consiste à déterminer successivement la meilleure rotation pour chaque axe : on commence par l’axe Y, puis on ajuste l’orientation de la pièce selon cette rotation optimale. Ensuite, on procède de la même manière pour l’axe X, puis enfin pour l’axe Z. À chaque étape, le code teste différentes valeurs de rotation et sélectionne celle qui minimise l’erreur d’alignement entre le modèle et la pièce détectée.
+
+La méthode consiste à déterminer successivement la meilleure rotation pour chaque axe : on commence par l’axe Y, puis on ajuste l’orientation de la pièce selon cette rotation optimale. Ensuite, on procède de la même manière pour l’axe X, puis enfin pour l’axe Z. À chaque étape, le code teste différentes valeurs de rotation et sélectionne celle qui minimise l’erreur d’alignement entre le modèle et la pièce détectée.
+Pour illustrer ce processus, les exemples présentés ci-dessous montrent des pièces volontairement orientées uniquement selon un seul axe à la fois (Y, puis X, puis Z). Cela permet de visualiser clairement l’effet de chaque étape et de mieux comprendre le fonctionnement de l’algorithme. Dans chaque cas et pour gagner du temps de traitement, la rotation est effectuée en incréments de 3 degrés. Le code peut être facilement modifié pour ajuster cette valeur si nécessaire.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\textwidth]{assets/figures/rote_y_avt_cote.png}
+    \caption{Rotation autour de l’axe Y : avant rotation (vue de côté)}
+    \label{fig:rot_y_avt_cote}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\textwidth]{assets/figures/rote_y_avt_face.png}
+    \caption{Rotation autour de l’axe Y : avant rotation (vue de face)}
+    \label{fig:rot_y_avt_face}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.70\textwidth]{assets/figures/rot_y_aprs_cote.png}
+    \caption{Rotation autour de l’axe Y : résultat après alignement (vue de côté)}
+    \label{fig:rot_y_aprs_cote}
+\end{figure}
+On peut voir que même avec une pièce très désaxée, le programme arrive à faire une rotation correcte et très satisfaisante. Il est à noter que la rotation est effectuée autour du centroïde de la pièce, ce qui permet de ne pas avoir de décalage dans la position de la pièce.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\textwidth]{assets/figures/rot_x_avt_cote.png}
+    \caption{Rotation autour de l’axe X : avant rotation (vue de côté)}
+    \label{fig:rot_x_avt_cote}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\textwidth]{assets/figures/rot_x_avt_face.png}
+    \caption{Rotation autour de l’axe X : avant rotation (vue de face)}
+    \label{fig:rot_x_avt_face}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.70\textwidth]{assets/figures/rot_x_aprs_cote.png}
+    \caption{Rotation autour de l’axe X : résultat après alignement (vue de côté)}
+    \label{fig:rot_x_aprs_cote}
+\end{figure}
+Ici, on constate que la pièce de base est très bruitée. Cela est dû à la qualité de la caméra. Cependant, le programme arrive tout de même à faire une rotation correcte.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\textwidth]{assets/figures/rot_z_avt.png}
+    \caption{Rotation autour de l’axe Z : avant rotation (vue de face)}
+    \label{fig:rot_z_avt}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{assets/figures/rot_z_aprs.png}
+    \caption{Rotation autour de l’axe Z : résultat après alignement (vue de face)}
+    \label{fig:rot_z_aprs}
+\end{figure}
+Dans ce cas, on peut voir que la rotation est très efficace. Même avec une pièce désaxée de plus de 90 degrés, le programme arrive à faire une rotation correcte. En pratique, le bras robot ne pouvant pas tourner autour de la pièce de plus de 30 degrés dans l'axe X et Y et de 45 degrés dans l'axe Z, il n'est pas nécessaire de faire des calculs pour une rotation aussi importante que celle montrée dans l'image ci-dessus. Il est tout de même intéressant de voir que le programme est capable de gérer des rotations importantes.
+
+\subsubsection{Transformation du repère caméra au repère monde (robot)}
+
+La position et l’orientation de la caméra dans le repère monde sont connues (translation et quaternion). On calcule la matrice de transformation homogène $T_{\text{cam} \to \text{world}}$.
+
+\subsubsection{Calcul de la position finale de la pièce dans le monde}
+
+On compose la transformation de la pièce dans la caméra ($T_{\text{piece} \to \text{cam}}$) avec celle de la caméra dans le monde ($T_{\text{cam} \to \text{world}}$) :
+\[
+    T_{\text{piece} \to \text{world}} = T_{\text{cam} \to \text{world}} \cdot T_{\text{piece} \to \text{cam}}
+\]
+On obtient ainsi la position et l’orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s’y rendre.
+
+\paragraph{Implémentation}
+La librairie \texttt{scipy.spatial.transform.Rotation} est utilisée pour convertir les quaternions en matrices de rotation, et \texttt{numpy} pour manipuler les matrices de transformation.
 
 
 
