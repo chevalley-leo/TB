@@ -1,17 +1,17 @@
 \chapter{Risques}
 \label{chap:risques}
 
-Après l'implémentation de la station de gravure laser intelligente, il est essentiel de procéder à une analyse des risques. Cette étape permet d'identifier les dangers potentiels liés à l'utilisation du robot et du laser dans cet environement spécifique. Grâce à cette analyse, des mesures physiques et logicielles de prévention et de maîtrise des risques peuvent être mises en place.
+Après l'implémentation de la station de gravure laser intelligente, il est essentiel de procéder à une analyse des risques. Cette étape permet d'identifier les dangers potentiels liés à l'utilisation du robot et du laser dans cet environnement spécifique. Grâce à cette analyse, des mesures physiques et \gls{software} de prévention et de maîtrise des risques peuvent être mises en place.
 
 \section{Analyse des risques}
-L'utilisation d'une station de gravure laser intelligente avec un bras robotisé en environnement public comporte plusieurs risques qu'il convient d'identifier, d'évaluer et de maîtriser. L'analyse suivante s'appuie sur le contexte du projet, les éléments matériels et logiciels utilisés, ainsi que les objectifs de sécurité et de fiabilité.
+L'utilisation d'une station de gravure laser intelligente avec un bras robotisé en environnement public comporte plusieurs risques qu'il convient d'identifier, d'évaluer et de maîtriser. L'analyse suivante s'appuie sur le contexte du projet, les éléments \gls{hardware} et \gls{software} utilisés, ainsi que les objectifs de sécurité et de fiabilité.
 
 \subsection{Risques identifiés}
 \begin{itemize}
     \item \textbf{Risque laser} : Le laser utilisé pour la gravure présente un danger pour la vue et la peau en cas d'exposition accidentelle. Un mauvais contrôle logiciel ou une défaillance matérielle pourrait entraîner l'activation du laser hors de la zone prévue.
-    \item \textbf{Risque robotique} : Le bras robot Ufactory Xarm6, bien que collaboratif, reste potentiellement dangereux. Il peut provoquer des blessures par collision ou pincement si un utilisateur s'approche trop près pendant le fonctionnement. Une sous section est dédiée à l'analyse de risques concernant le robot.
+    \item \textbf{Risque robotique} : Le bras robot \gls{ufactory} \gls{xarm6}, bien que collaboratif, reste potentiellement dangereux. Il peut provoquer des blessures par collision ou pincement si un utilisateur s'approche trop près pendant le fonctionnement. Une sous-section est dédiée à l'analyse de risques concernant le robot.
     \item \textbf{Risque électrique} : La station comporte plusieurs alimentations électriques (robot, laser, écran tactile) pouvant présenter un danger en cas de défaut d'isolation ou de manipulation inappropriée. Notamment au niveau des alimentations 230V des différents éléments.
-    \item \textbf{Risque logiciel et synchronisation} : Une erreur dans la synchronisation entre le robot et le laser pourrait activer le laser au mauvais moment ou déplacer le robot de façon imprévue.
+    \item \textbf{Risque logiciel et synchronisation} : Une erreur dans la synchronisation entre le robot et le laser pourrait activer le laser au mauvais moment ou déplacer le robot de façon imprévue (\gls{software}).
     \item \textbf{Risque de mauvaise détection} : Une défaillance de la caméra ou une erreur dans le traitement des données pourrait entraîner une mauvaise localisation de la pièce à graver, provoquant des collisions ou des gravures hors zone.
     \item \textbf{Risque d'utilisation publique} : En contexte de démonstration, le public peut adopter des comportements imprévisibles (toucher, interférer, etc.), augmentant les risques d'accident.
 \end{itemize}
@@ -22,22 +22,22 @@ L'utilisation d'une station de gravure laser intelligente avec un bras robotisé
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.4}
-    \begin{tabular}{|c|p{3.5cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|>{\centering\arraybackslash}m{2.2cm}|p{3.5cm}|}
+    \begin{tabular}{|c|p{2.5cm}|>{\centering\arraybackslash}m{2cm}|>{\centering\arraybackslash}m{2cm}|>{\centering\arraybackslash}m{2cm}|p{3.5cm}|}
         \hline
-        \textbf{N°} & \textbf{Risque} & \textbf{Sévérité} & \textbf{Fréquence} & \textbf{Importance} & \textbf{Description} \\
+        \textbf{N°} & \textbf{Risque}                                 & \textbf{Sévérité}               & \textbf{Fréquence}              & \textbf{Importance}          & \textbf{Description}                                                                                       \\
         \hline
-        1 & Collision avec un utilisateur & \cellcolor{orange!60}Moyenne & \cellcolor{yellow!60}Faible & \cellcolor{orange!60}Moyenne & Blessure possible en cas de contact entre le bras robot et une personne. \\
+        1           & Collision avec un utilisateur                   & \cellcolor{orange!60}Moyenne    & \cellcolor{yellow!60}Faible     & \cellcolor{orange!60}Moyenne & Blessure possible en cas de contact entre le bras robot et une personne.                                   \\
         \hline
-        2 & Pincement lors du mouvement & \cellcolor{green!60}Très Faible & \cellcolor{yellow!60}Faible & \cellcolor{yellow!60}Faible & Risque de pincement des doigts ou de la main lors des mouvements du robot, notamment avec la pince. \\
+        2           & Pincement lors du mouvement                     & \cellcolor{green!60}Très Faible & \cellcolor{yellow!60}Faible     & \cellcolor{yellow!60}Faible  & Risque de pincement des doigts ou de la main lors des mouvements du robot, notamment avec la pince.        \\
         \hline
-        3 & Mauvaise préhension de la pièce & \cellcolor{yellow!60}Faible & \cellcolor{red!60}Élevée & \cellcolor{orange!60}Moyenne & Le robot peut mal saisir la pièce, entraînant des erreurs de positionnement et des comportements imprévus. \\
+        3           & Mauvaise préhension de la pièce                 & \cellcolor{yellow!60}Faible     & \cellcolor{red!60}Élevée        & \cellcolor{orange!60}Moyenne & Le robot peut mal saisir la pièce, entraînant des erreurs de positionnement et des comportements imprévus. \\
         \hline
-        4 & Mouvement imprévu suite à une erreur logicielle & \cellcolor{yellow!60}Faible & \cellcolor{green!60}Très faible & \cellcolor{yellow!60}Faible & Un bug logiciel peut entraîner un déplacement non anticipé du robot. \\
+        4           & Mouvement imprévu suite à une erreur logicielle & \cellcolor{yellow!60}Faible     & \cellcolor{green!60}Très faible & \cellcolor{yellow!60}Faible  & Un bug logiciel peut entraîner un déplacement non anticipé du robot.                                       \\
         \hline
-        5 & Défaillance du système de sécurité & \cellcolor{red!60}Élevée & \cellcolor{green!60}Très faible & \cellcolor{orange!60}Moyenne & Si les dispositifs de sécurité ne fonctionnent pas, le robot peut devenir dangereux. \\
+        5           & Défaillance du système de sécurité              & \cellcolor{red!60}Élevée        & \cellcolor{green!60}Très faible & \cellcolor{orange!60}Moyenne & Si les dispositifs de sécurité ne fonctionnent pas, le robot peut devenir dangereux.                       \\
         \hline
     \end{tabular}
-    \caption{Tableau d'analyse des risques robotiques pour le bras Ufactory Xarm6 dans le cadre de l'utilisation de la station de gravure laser intelligente.}
+    \caption{Tableau d'analyse des risques robotiques pour le bras \gls{ufactory} \gls{xarm6} dans le cadre de l'utilisation de la station de gravure laser intelligente.}
     \label{tab:risques_robotique}
 \end{table}
 

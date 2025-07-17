@@ -1,16 +1,17 @@
 \chapter{Programmation}
 \label{chap:programmation}
 
-La plupart des scripts étant conçus pour fonctionner dans AICA Studio et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que telle.
+La plupart des scripts étant conçus pour fonctionner dans \gls{aicaS} et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que telle.
 
-Ainsi, la plupart des programmes et blocs fonctionnels ont d'abord été développés et testés en Python de façon indépendante, sans intégration directe à AICA Studio. Cette approche a permis de valider les algorithmes et le fonctionnement général dans un environnement plus simple et maîtrisé. Les scripts on ensuite été adaptés pour fonctionner dans des blocs fonctionnels AICA Studio. Les blocs fonctionnels pouvant être écris en python, l'intégration n'était pas très complexe mais la décision de faire étape par étape a permis de gagner du temps la preuve de concept et a permis d'éviter des erreurs.
+La plupart des programmes et blocs fonctionnels ont d'abord été développés et testés en \gls{python} de manière indépendante, sans intégration directe à \gls{aicaS}. Cette méthode a permis de valider les algorithmes et le fonctionnement général dans un environnement simple et maîtrisé. Par la suite, les scripts ont été adaptés pour fonctionner dans des blocs fonctionnels \gls{aicaS}. Comme ces blocs peuvent être écrits en \gls{python}, l'intégration s'est révélée relativement simple. Ce choix d'une démarche progressive a permis de gagner du temps lors de la phase de preuve de concept et de débogage.
 
-Dans un second temps, quand le développement a été finalisé, l'intégration dans l'environnement AICA Studio a été réalisée. Cette étape a consisté à adapter les scripts pour qu'ils fonctionnent avec l'architecture \gls{ros2} imposée par AICA Studio, en veillant à la compatibilité des communications et à l'intégration des blocs fonctionnels dans le système global.
+Dans un second temps, quand le développement a été finalisé, l'intégration dans l'environnement \gls{aicaS} a été réalisée. Cette étape a consisté à adapter les scripts pour qu'ils fonctionnent avec l'architecture \gls{ros2} imposée par \gls{aicaS}, en veillant à la compatibilité des communications et à l'intégration des blocs fonctionnels dans le système global.
 
 Cette démarche a permis de gagner du temps sur le développement initial, tout en assurant une intégration robuste et conforme aux exigences de la plateforme finale.
 
+\clearpage
 \section{Ecran tactile}
-L'écran tactile ED101 est le seul élément de la maquette qui n'est pas directement lié au logiciel AICA Studio. Un script Python a été développé avec la bibliothèque \texttt{tkinter} pour permettre à l'utilisateur de dessiner et d'envoyer directement le fichier DXF correspondant au PC principal. Un Bloc fonctionnel a été créé dans AICA Studio pour recevoir ce fichier DXF.
+L'écran tactile \gls{ED-HMI3010-101C} (ED101) est le seul élément de la maquette qui n'est pas directement lié au logiciel \gls{aicaS}. Un script \gls{python} a été développé avec la bibliothèque \texttt{tkinter} pour permettre à l'utilisateur de dessiner et d'envoyer directement le fichier \gls{dxf} correspondant au PC principal. Un Bloc fonctionnel a été créé dans \gls{aicaS} pour recevoir ce fichier \gls{dxf}.
 
 \begin{figure}[H]
     \centering
@@ -20,11 +21,11 @@ L'écran tactile ED101 est le seul élément de la maquette qui n'est pas direct
 \end{figure}
 
 \section{Graveuse laser}
-Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel AICA Studio, un bloc fonctionnel a été développé avec \gls{ezdxf} \cite{DXFDocs} afin de :
+Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel \gls{aicaS}, un bloc fonctionnel a été développé avec \gls{ezdxf} \cite{DXFDocs} afin de :
 \begin{itemize}
-    \item Charger un fichier DXF.
-    \item Convertir le fichier DXF en G-code.
-    \item Envoyer le G-code à la graveuse laser.
+    \item Charger un fichier \gls{dxf}.
+    \item Convertir le fichier \gls{dxf} en \gls{gcode}.
+    \item Envoyer le \gls{gcode} à la graveuse laser.
     \item Gérer la synchronisation entre le bras robot et la graveuse laser.
 \end{itemize}
 
@@ -37,15 +38,11 @@ Afin de pouvoir communiquer avec la graveuse laser depuis le logiciel AICA Studi
 
 On peut voir en haut à gauche un signal d'entrée pour le chargement du bloc fonctionnel. Ce signal est utilisé en début de programme sur tous les blocs fonctionnels pour initialiser les paramètres nécessaires. Il permet également de désactiver et d'activer le bloc pendant l'exécution du programme. En bas à gauche, le signal d'entrée \texttt{Run gcode file} est utilisé pour charger le fichier DXF à graver. Au centre à droite, le signal de sortie \texttt{Laser Finished} permet de savoir quand la graveuse à terminé de graver la pièce.
 
-
-
-
-
 \section{Caméra}
-
-La caméra Intel D435 est intégrée dans le système via un bloc fonctionnel personnalisé développé dans AICA Studio. Ce bloc utilise les données de profondeur captées par la caméra pour détecter la position des pièces à graver.
+La caméra Intel D435 est intégrée dans le système via un bloc fonctionnel personnalisé développé dans \gls{aicaS}. Ce bloc utilise les données de profondeur captées par la caméra pour détecter la position des pièces à graver.
 Afin d'obtenir un retour de données rapide, le code est optimisé pour minimiser le temps de traitement et permettre une mise a jour toutes les 300ms. Le but est d'envoyer le robot à la position de la pièce à prendre et de corriger la trajectoire toutes les 300ms.
 Le programme fonctionne selon les étapes suivantes :
+
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.55\textwidth}
@@ -107,7 +104,7 @@ Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la c
     \label{fig:camera_interface}
 \end{figure}
 
-Ici, les entrées sont principalement des entrées de chargement en début de programme. Concernant les sorties, le bloc \texttt{Realsense\_Camera} envoie en entrée au bloc \texttt{Piece\_Detection} le nuage de points, les couleurs correspondantes et les informations du nuage de points. Le bloc \texttt{Piece\_Detection} utilise ces données pour détecter la pièce et publier sa position et son orientation dans le repère du robot. Les autres sorties du bloc \texttt{Piece\_Detection} permettent d'activer ou desactiver les blocs d'approche ou de retour en positon de base en fonction de la confirmation ou non de la bonne détection de la pièce.
+Ici, les entrées sont principalement des entrées de chargement en début de programme. Concernant les sorties, le bloc \texttt{Realsense\_Camera} envoie en entrée au bloc \texttt{Piece\_Detection} le nuage de points, les couleurs correspondantes et les informations du nuage de points. Le bloc \texttt{Piece\_Detection} utilise ces données pour détecter la pièce et publier sa position et son orientation dans le repère du robot. Les autres sorties du bloc \texttt{Piece\_Detection} permettent d'activer ou désactiver les blocs d'approche ou de retour en position de base en fonction de la confirmation ou non de la bonne détection de la pièce.
 
 \subsection{Transformation du repère caméra au repère robot}
 
@@ -122,12 +119,14 @@ La position de la pièce est estimée en superposant le centroïde du modèle 3D
 \setlength{\belowcaptionskip}{0pt}
 \begin{listing}[H]
     \inputminted{python}{assets/code/rotation.py}
-    \caption{Exemple de code pour la rotation de la pièce dans le repère caméra}
+    \caption{Extrait de code pour la rotation de la pièce dans le repère caméra}
 \end{listing}
-La méthode consiste à déterminer successivement la meilleure rotation pour chaque axe : on commence par l’axe Y, puis on ajuste l’orientation de la pièce selon cette rotation optimale. Ensuite, on procède de la même manière pour l’axe X, puis enfin pour l’axe Z. À chaque étape, le code teste différentes valeurs de rotation et sélectionne celle qui minimise l’erreur d’alignement entre le modèle et la pièce détectée.
 
 La méthode consiste à déterminer successivement la meilleure rotation pour chaque axe : on commence par l’axe Y, puis on ajuste l’orientation de la pièce selon cette rotation optimale. Ensuite, on procède de la même manière pour l’axe X, puis enfin pour l’axe Z. À chaque étape, le code teste différentes valeurs de rotation et sélectionne celle qui minimise l’erreur d’alignement entre le modèle et la pièce détectée.
 Pour illustrer ce processus, les exemples présentés ci-dessous montrent des pièces volontairement orientées uniquement selon un seul axe à la fois (Y, puis X, puis Z). Cela permet de visualiser clairement l’effet de chaque étape et de mieux comprendre le fonctionnement de l’algorithme. Dans chaque cas et pour gagner du temps de traitement, la rotation est effectuée en incréments de 3 degrés. Le code peut être facilement modifié pour ajuster cette valeur si nécessaire.
+
+\clearpage
+\subsubsection{Rotation autour de l'axe Y}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.50\textwidth]{assets/figures/rote_y_avt_cote.png}
@@ -147,6 +146,11 @@ Pour illustrer ce processus, les exemples présentés ci-dessous montrent des pi
     \label{fig:rot_y_aprs_cote}
 \end{figure}
 On peut voir que même avec une pièce très désaxée, le programme arrive à faire une rotation correcte et très satisfaisante. Il est à noter que la rotation est effectuée autour du centroïde de la pièce, ce qui permet de ne pas avoir de décalage dans la position de la pièce.
+
+\clearpage
+
+\subsubsection{Rotation autour de l'axe X}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.50\textwidth]{assets/figures/rot_x_avt_cote.png}
@@ -167,6 +171,10 @@ On peut voir que même avec une pièce très désaxée, le programme arrive à f
 \end{figure}
 Ici, on constate que la pièce de base est très bruitée. Cela est dû à la qualité de la caméra. Cependant, le programme arrive tout de même à faire une rotation correcte.
 
+\clearpage
+
+\subsubsection{Rotation autour de l'axe Z}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.50\textwidth]{assets/figures/rot_z_avt.png}
@@ -180,7 +188,6 @@ Ici, on constate que la pièce de base est très bruitée. Cela est dû à la qu
     \label{fig:rot_z_aprs}
 \end{figure}
 Dans ce cas, on peut voir que la rotation est très efficace. Même avec une pièce désaxée de plus de 90 degrés, le programme arrive à faire une rotation correcte. En pratique, le bras robot ne pouvant pas tourner autour de la pièce de plus de 30 degrés dans l'axe X et Y et de 45 degrés dans l'axe Z, il n'est pas nécessaire de faire des calculs pour une rotation aussi importante que celle montrée dans l'image ci-dessus. Il est tout de même intéressant de voir que le programme est capable de gérer des rotations importantes.
-
 \subsubsection{Transformation du repère caméra au repère monde (robot)}
 
 La position et l’orientation de la caméra dans le repère monde sont connues (translation et quaternion). On calcule la matrice de transformation homogène $T_{\text{cam} \to \text{world}}$.
@@ -193,10 +200,7 @@ On compose la transformation de la pièce dans la caméra ($T_{\text{piece} \to 
 \]
 On obtient ainsi la position et l’orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s’y rendre.
 
-\paragraph{Implémentation}
 La librairie \texttt{scipy.spatial.transform.Rotation} est utilisée pour convertir les quaternions en matrices de rotation, et \texttt{numpy} pour manipuler les matrices de transformation.
-
-
 
 Cette méthode permet de publier la position et l'orientation de la pièce dans le repère global, ce qui est indispensable pour que le robot puisse saisir ou interagir avec la pièce détectée.
 
@@ -231,6 +235,8 @@ Dans ce projet, il n'a pas été nécessaire de réaliser une calibration manuel
     \captionof{figure}{Illustration de la transformation de repère caméra vers monde}
 \end{minipage}
 
+
+\clearpage
 \section{Programme AICA Studio}
 
 Cette section présente l'intégration des différents blocs fonctionnels développés. A l'aide de blocs de base du logiciel et de certains blocs fournis après coup par l'entreprise, il a été possible de créer un programme qui relie tous les éléments de la maquette ensemble.
@@ -243,9 +249,10 @@ Cette section présente l'intégration des différents blocs fonctionnels dével
 \end{figure}
 
 On constate beaucoup d'éléments différents dans le programme, notamment :
+
 \begin{enumerate}
-    \item Le bloc TCP de communication avec le PC de l'écran tactile.
-    \item Le bloc de la graveuse laser qui permet de charger le fichier DXF et de lancer la machine
+    \item Le bloc \gls{tcp} de communication avec le PC de l'écran tactile.
+    \item Le bloc de la graveuse laser qui permet de charger le fichier \gls{dxf} et de lancer la machine
     \item Le bloc de la caméra qui permet de détecter la position de la pièce.
     \item Le bloc du bras robot qui permet de communiquer directement avec l'appareil
     \item Le bloc de séquence qui permet de gérer l'ordre d'exécution des différentes tâches lorsque le robot attrape une pièce.
@@ -282,12 +289,24 @@ Le bloc de séquence est utilisé dans la seconde partie du programme. Il sert �
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Sequence (2).png}
+    \includegraphics[width=1\textwidth]{assets/figures/AICA_Sequence (2).png}
     \caption{Bloc de séquence dans AICA Studio}
     \label{fig:sequence_block}
 \end{figure}
 
-(partie à modifier) Dans ce cas, le bloc de séquence est activé après que le robot ait saisi la pièce. Dans un premier temps, un délai d'une seconde est appliqué pour laisser le temps à l'un des contrôleur du robot de se désactiver. ensuite le signal est donné au second contrôleur de s'activer et un second délais est laissé. Ensuite, pour faciliter la compréhension du programme, toutes les connexions qui vont au même endroit sont sur la même ligne. On peut donc voir que le quatrième élément de la séquence est une commande de position. D'autres commandes de positions sont alors identifiables en septième et dixième position. Le cinquième élément lui, est un signal venant du robot qui ne s'active que quand le robot à fini de se déplacer. Cela permet de contrôler le déroulement de la séquence en mettant des points de vérifications dans le cas ou un mouvement ne se passe pas comme prévu. Les éléments 8 et 11 sont aussi des retours. Le sixième élément est un signal qui va directement dans le bloc d'interface avec la graveuse laser. C'est lui qui s'occupe de démarrer la graveuse laser. L'élément 9 est un signal de retour venant du bloc d'interface de la graveuse laser. Il est utilisé pour savoir si la graveuse a fini de graver ou non. Ensuite le douzième élément est un signal envoyé au bloc robot pour ouvrir la pince. Pour terminer, les trois derniers éléments remettent le programme dans sa position de départ, en désactivant le contrôleur utilisé par la séquence et en réactivant le contrôleur utilisé pour la prise de la pièce. (partie à modifier)
+Afin de mieux comprendre le fonctionnement de ce bloc, les étapes de la séquences ont été encadrées en couleur :
+\begin{itemize}
+    \item \textbf{\textcolor{violet}{Violet}} : Délai pour laisser le temps aux contrôleurs de se désactiver ou de s'activer.
+    \item \textbf{\textcolor{yellow!80!black}{Jaune}} : Commande d'activations ou de désactivations des contrôleurs.
+    \item \textbf{\textcolor{green!70!black}{Vert}} : Commande de position du robot.
+    \item \textbf{\textcolor{brown}{Brun}} : Attente de validation de la prise de la pièce.
+    \item \textbf{\textcolor{red}{Rouge}} : Validation du mouvement du robot.
+    \item \textbf{\textcolor{magenta}{Rose}} : Commande de la graveuse laser.
+    \item \textbf{\textcolor{black}{Blanc}} : Validation de la fin de séquence de la graveuse laser.
+    \item \textbf{\textcolor{cyan}{Bleu clair}} : Ouverture de la pince du robot.
+\end{itemize}
+
+Avec ces indications, il devient alors facile de comprendre le fonctionnement du bloc de séquence.
 
 \subsection{Blocs de gestion de prise de pièce}
 

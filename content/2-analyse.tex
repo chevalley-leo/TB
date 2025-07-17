@@ -1,10 +1,10 @@
 \chapter{Analyse}
 \label{chap:analyse}
 
-Ce chapitre présente l'exploration du fonctionnement des différents éléments tel que la caméra, la graveuse laser, l'écran tactile, la prise en main du bras robot Ufactory Xarm6 et du logiciel AICA Studio. Il s'agit d'une étape de découverte et d'apprentissage des outils et des technologies utilisées. Cela permet également de prouver le faisabilité du projet.
+Ce chapitre présente l'exploration du fonctionnement des différents éléments tel que la caméra, la graveuse laser, l'écran tactile, la prise en main du bras robot \gls{ufactory} \gls{xarm6} et du logiciel \gls{aica} Studio. Il s'agit d'une étape de découverte et d'apprentissage des outils et des technologies utilisées. Cela permet également de prouver le faisabilité du projet.
 
 \section{Prise en main du bras robot}
-La prise en main du bras robot Ufactory Xarm6 a été une des premières étapes du projet. Le but était de se familiariser avec les commandes et de comprendre les limites physiques et logicielles du robot.
+La prise en main du bras robot \gls{ufactory} \gls{xarm6} a été une des premières étapes du projet. Le but était de se familiariser avec les commandes et de comprendre les limites physiques et logicielles du robot.
 
 \subsection{Mise en marche du robot et connexion}
 Avec le manuel utilisateur fourni par Ufactory \cite{UserManual}, il a été possible de comprendre et prendre en main le robot. La première étape après la mise sous tension à été la connexion ethernet entre le contrôleur et le logiciel UFACTORY-Studio. La procédure est très simple et ne demande aucune configuration particulière.
@@ -12,10 +12,10 @@ Avec le manuel utilisateur fourni par Ufactory \cite{UserManual}, il a été pos
 \subsection{UFACTORY-Studio}
 Le logiciel UFACTORY-Studio est utile pour configurer la position initiale du robot, les limites de mouvements, la force maximale de chaque articulation et les limites de distances à ne pas dépasser.
 
-En plus de cela, le logiciel offre un contrôle complet sur les entrées/sorties (appelées par la suite \gls{io}), les axes, la vitesse de déplacement et l'ouverture/fermeture de la pince. Il est également possible de créer des programmes de mouvements en utilisant le langage  de programation Python ou un langage visuel propriétaire basé sur le Python. Le langage visuel reste très basique et ne permet pas de créer des programmes complexes qui sortent du cadre de la cinématique du robot.
+En plus de cela, le logiciel offre un contrôle complet sur les entrées/sorties (appelées par la suite \gls{io}), les axes, la vitesse de déplacement et l'ouverture/fermeture de la pince. Il est également possible de créer des programmes de mouvements en utilisant le langage  de programation \gls{python} ou un langage visuel propriétaire basé sur le \gls{python}. Le langage visuel reste très basique et ne permet pas de créer des programmes complexes qui sortent du cadre de la cinématique du robot.
 
-\subsection{Python SDK}
-Pour s'affranchir des limitations du logiciel UFACTORY-Studio, il est possible d'utiliser le \gls{sdk} Python \cite{PythonSDK} fourni par Ufactory. Ce SDK permet de contrôler le robot de manière plus avancée et de créer des programmes plus complexes. Le langage de base de contrôle du robot étant le Python, il est possible d'utiliser n'importe quel \gls{IDE} Python pour développer des programmes. La documentation du \gls{sdk} étant très complète avec de nombreux exemples, la compréhension et la prise en main du SDK se sont faites rapidement. De plus, les contrôles de cinématique sont plus "bas niveau" ce qui offre plus de flexibilité notamment au niveau de l'accéleration, du \gls{jerk} et des opérations sur les positions.
+\subsection{\gls{python} \gls{sdk}}
+Pour s'affranchir des limitations du logiciel UFACTORY-Studio, il est possible d'utiliser le \gls{sdk} \gls{python} \cite{PythonSDK} fourni par \gls{ufactory}. Ce \gls{sdk} permet de contrôler le robot de manière plus avancée et de créer des programmes plus complexes. Le langage de base de contrôle du robot étant le \gls{python}, il est possible d'utiliser n'importe quel \gls{IDE} \gls{python} pour développer des programmes. La documentation du \gls{sdk} étant très complète avec de nombreux exemples, la compréhension et la prise en main du SDK se sont faites rapidement. De plus, les contrôles de cinématique sont plus "bas niveau" ce qui offre plus de flexibilité notamment au niveau de l'accéleration, du \gls{jerk} et des opérations sur les positions.
 
 \subsection{Entrées/sorties}
 Le contrôleur du bras robot offre plusieurs types d'\gls{io}:
@@ -63,29 +63,35 @@ Le contrôleur du bras robot offre plusieurs types d'\gls{io}:
 
 Ces \gls{io} permettent la communication avec des éléments externes.
 
-\section{AICA Studio}
+\section{\gls{aicaS}}
 
-MODIFIER CETTE PARTIE POUR MIEUX EXPLIQUER AICA STUDIO
+\gls{aicaS} est une plateforme logicielle dédiée à l'intégration, la programmation et la supervision de robots industriels. Son principal atout réside dans son interface graphique intuitive, qui permet de concevoir des programmes complexes à l'aide de blocs fonctionnels visuels, sans nécessiter de compétences avancées en programmation.
 
-AICA Studio est un logiciel qui simplifie l'intégration et la programmation de robots industriels via des blocs de fonctions prédéfinis. Il est compatible avec le bras robot Ufactory Xarm6 et permet de créer des programmes de manière visuelle, sans nécessiter de compétences avancées en programmation. Ce logiciel s'appuie sur \gls{ros2}, qui gère les aspects bas-niveau du contrôle et de la communication,en cachant sa complexité et proposant une interface simplifiée pour la gestion des tâches complexes, telles que la planification de trajectoires ou l'intégration d'opérations avancées comme la détection de collisions ou le contrôle du robot avec l'interface \gls{rviz} sont possibles avec AICA Studio.
+\gls{aicaS} est un logiciel permettant d’intégrer et de programmer des robots industriels à l’aide de blocs fonctionnels visuels. Il est compatible avec plusieurs robots, dont le bras \gls{ufactory} \gls{xarm6} utilisé ici. L’utilisateur peut assembler des séquences d’actions à partir d’une bibliothèque de blocs prédéfinis (mouvements, entrées/sorties, communication, etc.), ce qui facilite la création de programmes sans avoir à écrire de code complexe.
 
-\subsection{Installation de AICA Studio}
-L'installation de AICA Studio est, plus complexe par rapport à UFACTORY-Studio. Il est nécessaire d'utiliser un système d'exploitation Linux. Le guide d'installation \cite{AICADocs} est complet et facile à suivre. Cependant, il est tout de même nécessaire d'avoir quelques connaissance de base en ligne de commandes et en gestion de systèmes Linux. L'avantage de cette installation est qu'elle permet de créer un environnement complet en incluant dans un \gls{conteneur} \gls{docker} tous les outils nécessaire au bon fonctionnement de l'application.
+Le logiciel repose sur \gls{ros2}, qui gère la communication entre les différents éléments du système. \gls{aicaS} masque la plupart des aspects techniques de \gls{ros2} et propose une interface simplifiée pour la gestion des tâches courantes (planification de trajectoires, synchronisation de périphériques, gestion des signaux, etc.).
 
-\subsection{Démarrage de AICA Studio}
-Le démarrage de AICA Studio suit la procédure strandard des applications Linux. Lorsque l'application est lancée pour la première fois, une fenêtre de configuration s'ouvre pour permettre d'entrer la clef de licence. Par la suite, l'application se lance et affiche une page de réglages pour choisir la version, les packages à installer et les volumes partagés pour l'utilisation de fichiers.
+Il est possible d’ajouter des blocs personnalisés en \gls{python} pour répondre à des besoins spécifiques, par exemple pour le traitement d’images ou l’automatisation de certaines tâches. L’environnement propose aussi des outils de visualisation (\gls{rviz}), de simulation et de diagnostic, utiles pour le développement et la maintenance.
+
+Malgré ses avantages, \gls{aicaS} présente certaines limites : la prise en main reste plus facile qu’avec des outils purement textuels, mais il est tout de même nécessaire de comprendre les bases de la programmation et de \gls{ros2} pour exploiter pleinement le logiciel. De plus, la configuration de certains blocs ou l’intégration de fonctionnalités avancées peuvent s’avérer complexes ou manquer de flexibilité selon les cas. Le logiciel reste tout de même un outil puissant et reçoit régulièrement des mises à jour pour améliorer ses fonctionnalités et sa stabilité.
+
+\subsection{Installation de \gls{aicaS}}
+L'installation de \gls{aicaS} est, plus complexe par rapport à UFACTORY-Studio. Il est nécessaire d'utiliser un système d'exploitation Linux. Le guide d'installation \cite{AICADocs} est complet et facile à suivre. Cependant, il est tout de même nécessaire d'avoir quelques connaissance de base en ligne de commandes et en gestion de systèmes Linux. L'avantage de cette installation est qu'elle permet de créer un environnement complet en incluant dans un \gls{conteneur} \gls{docker}, tous les outils nécessaire au bon fonctionnement de l'application.
+
+\subsection{Démarrage de \gls{aicaS}}
+Le démarrage de \gls{aicaS} suit la procédure strandard des applications Linux. Lorsque l'application est lancée pour la première fois, une fenêtre de configuration s'ouvre pour permettre d'entrer la clef de licence. Par la suite, l'application se lance et affiche une page de réglages pour choisir la version, les packages à installer et les volumes partagés pour l'utilisation de fichiers.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/figures/AICA_Mainmenu.png}
-    \caption{Page de démarrage de AICA Studio}
+    \caption{Page de démarrage de \gls{aicaS}}
     \label{fig:aica_startup}
 \end{figure}
 
 \subsection{Interface de AICA Studio}
-Le logiciel est relativement intuitif et facile à prendre en main pour ce qui est de la création de programmes et la connexion des blocs fonctionnels. Cependant à l'heure actuelle, il est nécessaire de comprendre des concepts de base de la programmation avec \gls{ros2} pour pouvoir maitriser et utiliser les différentes possibilités offertes par le logiciel. Il est donc recommandé de suivre les tutoriels, la documentation fournis par AICA ainsi que les ressources en ligne pour se familiariser avec les concepts de base de AICA studio avant de se lancer dans la création de programmes.
+Le logiciel est relativement intuitif et facile à prendre en main pour ce qui est de la création de programmes et la connexion des blocs fonctionnels. Cependant à l'heure actuelle, il est nécessaire de comprendre des concepts de base de la programmation avec \gls{ros2} pour pouvoir maitriser et utiliser les différentes possibilités offertes par le logiciel. Il est donc recommandé de suivre les tutoriels, la documentation fournis par \gls{aica} ainsi que les ressources en ligne pour se familiariser avec les concepts de base de \gls{aicaS} avant de se lancer dans la création de programmes.
 
-Il est possible de créer des programmes de deux manières différentes avec AICA Studio :
+Il est possible de créer des programmes de deux manières différentes avec \gls{aicaS} :
 \begin{itemize}
     \item En utilisant des blocs fonctionnels prédéfinis, qui permettent de créer des programmes de manière visuelle en connectant les blocs entre eux.
     \item En utilisant la fenêtre de programmation \gls{yaml}, qui permet d'avoir une vison plus detaillée du programme et de modifier les paramètres sans passer par la fenêtre de configuration des blocs.
@@ -103,10 +109,10 @@ Il est possible de créer des programmes de deux manières différentes avec AIC
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=0.95\linewidth]{assets/figures/AICA_Yaml.png}
-        \caption{Programmation via YAML}
+        \caption{Programmation via \gls{yaml}}
         \label{fig:prog_yaml}
     \end{subfigure}
-    \caption{Comparaison entre la programmation visuelle et la programmation YAML dans AICA Studio.}
+    \caption{Comparaison entre la programmation visuelle et la programmation \gls{yaml} dans \gls{aicaS}.}
     \label{fig:comparaison_yaml_visuel}
 \end{figure}
 
@@ -154,43 +160,42 @@ Concernant le reste de l'interface, le logiciel contient :
             \label{fig:aica_play_pause}
         \end{subfigure}
     \end{tabular}
-    \caption{Principaux éléments de l'interface de AICA Studio (présentation en grille 2x2).}
+    \caption{Principaux éléments de l'interface de \gls{aicaS}.}
     \label{fig:aica_interface_elements}
 \end{figure}
 
-Ces éléments permettent de naviguer facilement dans l'application et d'accéder aux différentes fonctionnalités. L'interface est conçue pour être intuitive et facile à utiliser. Malgré les limitations actuelles du logiciel et la nécessité de comprendre les concepts de base de \gls{ros2} ainsi que les premières versions de AICA Studio, l'interface utilisateur est à présent agréable à utiliser.
+Ces éléments permettent de naviguer facilement dans l'application et d'accéder aux différentes fonctionnalités. L'interface est conçue pour être intuitive et facile à utiliser. Malgré les limitations actuelles du logiciel et la nécessité de comprendre les concepts de base de \gls{ros2} ainsi que les premières versions de \gls{aicaS}, l'interface utilisateur est à présent agréable à utiliser.
 
-\section{Analyse de la caméra Intel D435}
+\section{Analyse de la caméra Intel RealSense D435}
 La caméra Intel RealSense D435 joue un rôle central dans la détection automatique des pièces à graver. Son capteur de profondeur permet de localiser précisément les objets dans l’espace de travail.
 \subsection{Principes de fonctionnement}
 La caméra utilise la technologie de stéréovision pour générer un nuage de points 3D. Cela permet d’obtenir la position et l’orientation des pièces avec une grande précision.
 \subsection{Intégration dans le système}
-La caméra est montée sur la maquette de façon à couvrir toute la zone de prise. Les données sont traitées en temps réel par un bloc fonctionnel dans AICA Studio.
+La caméra est montée sur la maquette de façon à couvrir toute la zone de prise. Les données sont traitées en temps réel par un bloc fonctionnel dans \gls{aicaS}.
 \subsection{Limites et contraintes}
 La qualité de la détection dépend fortement de l’éclairage et de la couleur des pièces. Des tests ont montré que certaines couleurs ou reflets peuvent perturber l’algorithme.
 
 \section{Analyse de la graveuse laser Creality Falcon}
 La graveuse laser Creality Falcon est utilisée pour réaliser la gravure sur les pièces détectées.
 \subsection{Caractéristiques techniques}
-La machine offre une bonne précision et une puissance adaptée à la gravure sur différents matériaux. Elle est compatible avec les fichiers G-code générés automatiquement.
+La machine offre une bonne précision et une puissance adaptée à la gravure sur différents matériaux. Elle est compatible avec les fichiers \gls{gcode} générés automatiquement.
 \subsection{Intégration et contrôle}
-La graveuse est pilotée via un bloc fonctionnel dans AICA Studio, qui reçoit les instructions de gravure après la détection et le positionnement de la pièce.
+La graveuse est pilotée via un bloc fonctionnel dans \gls{aicaS}, qui reçoit les instructions de gravure après la détection et le positionnement de la pièce.
 \subsection{Limites et points d’attention}
 La synchronisation avec le robot est essentielle pour éviter les erreurs de gravure. La machine doit être correctement positionnée et sécurisée pour garantir la qualité et la sécurité du processus.
 
 \section{Analyse de l’écran tactile ED-101}
 L’écran tactile ED-HMI3010-101C (ED-101) permet à l’utilisateur de dessiner le motif à graver et d’interagir avec la station.
 \subsection{Interface utilisateur}
-L’application développée en Python (Tkinter) offre une interface intuitive pour dessiner, sélectionner des formes et envoyer le fichier DXF au système.
+L’application développée en \gls{python} (Tkinter) offre une interface intuitive pour dessiner, sélectionner des formes et envoyer le fichier \gls{dxf} au système.
 \subsection{Communication et intégration}
-L’écran communique avec le PC principal via le réseau, et le fichier DXF est transmis au bloc fonctionnel de la graveuse laser.
-\subsection{Limites et ergonomie}
-L’ergonomie de l’interface a été saluée lors des tests, mais certaines fonctionnalités pourraient être enrichies pour faciliter la prise en main par des utilisateurs novices.
+L’écran communique avec le PC principal via le réseau, et le fichier \gls{dxf} est transmis au bloc fonctionnel de la graveuse laser.
+
 
 \section{Limites}
 Bien que la station de gravure laser intelligente réponde aux besoins initiaux du projet, certaines limites ont été identifiées:
 \begin{itemize}
-    \item \textbf{Dépendance logicielle} : Le système repose sur des logiciels propriétaires (AICA Studio, UFACTORY) qui peuvent évoluer ou devenir obsolètes.
+    \item \textbf{Dépendance logicielle} : Le système repose sur un logiciel propriétaire (\gls{aicaS}) qui peut évoluer ou devenir obsolète. Il est également nécessaire d'avoir une clé de licence pour utiliser le logiciel.
     \item \textbf{Sécurité} : Malgré les mesures prévues, la sécurité en contexte public dépend fortement de la vigilance de l'opérateur.
     \item \textbf{Flexibilité des scénarios} : Le système est optimisé pour la démonstration, mais moins adapté à une production industrielle ou à des pièces très variées.
 \end{itemize}
