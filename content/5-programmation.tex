@@ -1,11 +1,11 @@
 \chapter{Programmation}
 \label{chap:programmation}
 
-La plupart des scripts étant conçus pour fonctionner dans \gls{aicaS} et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que telle.
+La plupart des scripts étant conçus pour fonctionner dans \gls{aicaS} et donc \gls{ros2}, il a été nécessaire d'adopter une architecture spécifique pour permettre la communication entre les différents éléments du système. Toutefois, l'objectif du travail n'était pas d'approfondir la compréhension ou la maîtrise de \gls{ros2} en tant que tel.
 
 La plupart des programmes et blocs fonctionnels ont d'abord été développés et testés en \gls{python} de manière indépendante, sans intégration directe à \gls{aicaS}. Cette méthode a permis de valider les algorithmes et le fonctionnement général dans un environnement simple et maîtrisé. Par la suite, les scripts ont été adaptés pour fonctionner dans des blocs fonctionnels \gls{aicaS}. Comme ces blocs peuvent être écrits en \gls{python}, l'intégration s'est révélée relativement simple. Ce choix d'une démarche progressive a permis de gagner du temps lors de la phase de preuve de concept et de débogage.
 
-Dans un second temps, quand le développement a été finalisé, l'intégration dans l'environnement \gls{aicaS} a été réalisée. Cette étape a consisté à adapter les scripts pour qu'ils fonctionnent avec l'architecture \gls{ros2} imposée par \gls{aicaS}, en veillant à la compatibilité des communications et à l'intégration des blocs fonctionnels dans le système global.
+Dans un second temps, lorsque le développement a été finalisé, l'intégration dans l'environnement \gls{aicaS} a été réalisée. Cette étape a consisté à adapter les scripts pour qu'ils fonctionnent avec l'architecture \gls{ros2} imposée par \gls{aicaS}, en veillant à la compatibilité des communications et à l'intégration des blocs fonctionnels dans le système global.
 
 Cette démarche a permis de gagner du temps sur le développement initial, tout en assurant une intégration robuste et conforme aux exigences de la plateforme finale.
 
@@ -40,10 +40,9 @@ On peut voir en haut à gauche un signal d'entrée pour le chargement du bloc fo
 
 \section{Caméra}
 La caméra Intel D435 est intégrée dans le système via un bloc fonctionnel personnalisé développé dans \gls{aicaS}. Ce bloc utilise les données de profondeur captées par la caméra pour détecter la position des pièces à graver.
-Afin d'obtenir un retour de données rapide, le code est optimisé pour minimiser le temps de traitement et permettre une mise a jour toutes les 300ms. Le but est d'envoyer le robot à la position de la pièce à prendre et de corriger la trajectoire toutes les 300ms.
+Afin d'obtenir un retour de données rapide, le code est optimisé pour minimiser le temps de traitement et permettre une mise à jour environ toutes les 300ms (dépendant du nombre de points du nuage). Le but est d'envoyer le robot à la position de la pièce à prendre et de corriger la trajectoire toutes les 300ms.
 Le programme fonctionne selon les étapes suivantes :
-
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{minipage}{0.55\textwidth}
         \centering
@@ -95,6 +94,7 @@ Le programme fonctionne selon les étapes suivantes :
     \label{fig:sequence_camera_illustre}
 \end{figure}
 
+\subsection{Bloc fonctionnel de la caméra}
 Tout comme le bloc fonctionnel de la graveuse laser, le bloc fonctionnel de la caméra offre une certaine liberté dans les paramètres de traitement. Il est par exemple possible de choisir la couleur de la pièce à détecter, modifier le modèle ainsi que le nombre de points de ce dernier. Cette flexibilité permet d'adapter le système tant dans la forme de la pièce à détecter que dans la rapidité de traitement. D'autres réglages sont aussi disponibles.
 
 \begin{figure}[H]
@@ -198,9 +198,9 @@ On compose la transformation de la pièce dans la caméra ($T_{\text{piece} \to 
 \[
     T_{\text{piece} \to \text{world}} = T_{\text{cam} \to \text{world}} \cdot T_{\text{piece} \to \text{cam}}
 \]
-On obtient ainsi la position et l’orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s’y rendre.
+On obtient ainsi la position et l’orientation de la pièce dans le repère monde (robot), ce qui permet au robot de s'y rendre.
 
-La librairie \texttt{scipy.spatial.transform.Rotation} est utilisée pour convertir les quaternions en matrices de rotation, et \texttt{numpy} pour manipuler les matrices de transformation.
+La librairie \texttt{scipy.spatial.transform.Rotation} est utilisée pour convertir les \gls{quaternions} en matrices de rotation, et \texttt{numpy} pour manipuler les matrices de transformation.
 
 Cette méthode permet de publier la position et l'orientation de la pièce dans le repère global, ce qui est indispensable pour que le robot puisse saisir ou interagir avec la pièce détectée.
 
@@ -260,7 +260,7 @@ On constate beaucoup d'éléments différents dans le programme, notamment :
     \item Les blocs de gestion de vérification de prise de pièce et d'avortement de la tâche en cours si nécessaire.
 \end{enumerate}
 
-Certains de ces blocs ou groupes de blocs on déjà étés expliqués ci-dessus, d'autres serons détaillés dans les sections suivantes.
+Certains de ces blocs ou groupes de blocs ont déjà été expliqués ci-dessus, d'autres seront détaillés dans les sections suivantes.
 
 \subsection{Bloc du bras robot}
 
@@ -306,11 +306,9 @@ Afin de mieux comprendre le fonctionnement de ce bloc, les étapes de la séquen
     \item \textbf{\textcolor{cyan}{Bleu clair}} : Ouverture de la pince du robot.
 \end{itemize}
 
-Avec ces indications, il devient alors facile de comprendre le fonctionnement du bloc de séquence.
-
 \subsection{Blocs de gestion de prise de pièce}
 
-Les blocs de gestion de prise de la pièce sont divisées en deux parties qui fonctionnent en alternance. La première partie est utilisée pour l'approche de la pièce et la seconde pour le retour dans la position de départ dans le cas ou la pièce n'est plus détectée. L'avantage de cette approche est que le robot se met automatiquement dans la position de départ au démarrage du programme.
+Les blocs de gestion de prise de la pièce sont divisés en deux parties qui fonctionnent en alternance. La première partie est utilisée pour l'approche de la pièce et la seconde pour le retour dans la position de départ dans le cas ou la pièce n'est plus détectée. L'avantage de cette approche est que le robot se met automatiquement dans la position de départ au démarrage du programme.
 
 \begin{figure}[H]
     \centering
@@ -324,12 +322,12 @@ Le fonctionnement de ces blocs repose sur une logique d'alternance entre deux é
 
 Cette logique permet d'assurer la sécurité et la robustesse du système: le robot ne tente jamais de saisir une pièce absente et se remet toujours dans une position sûre en cas d'erreur ou d'absence de détection. De plus, cela facilite la reprise du processus dès qu'une nouvelle pièce est détectée, sans intervention manuelle.
 
-L'implémentation de cette alternance est réalisée à l'aide du bloc de détection de la pièce, qui envoie active ou désactive les blocs en fonction de si la pièce est détectée ou non.
+L'implémentation de cette alternance est réalisée à l'aide du bloc de détection de la pièce, qui active ou désactive les blocs en fonction de la confirmation de la présence de la pièce.
 
 
 \subsection{Blocs de vérification et d'avortement}
 
-Les blocs de verification et d'avortement sont des éléments de sécurité ajoutés afin de s'assurer que le robot ne continue pas sa séquence si la pièce n'est pas prise. Cela rajoute un point de sécurité qui minimise donc les conséquences d'une mauvaise prise de la pièce.  Cette décision à été prise suite a l'élaboration du tableau des risques du \textbf{chapitre \ref{chap:analyse}}.
+Les blocs de vérification et d'avortement sont des éléments de sécurité ajoutés afin de s'assurer que le robot ne continue pas sa séquence si la pièce n'est pas prise. Cela rajoute un point de sécurité qui minimise donc les conséquences d'une mauvaise préhension de la pièce.  Cette décision a été prise suite à l'élaboration du tableau des risques du \textbf{chapitre \ref{chap:analyse}}.
 
 \begin{figure}[H]
     \centering
@@ -338,7 +336,7 @@ Les blocs de verification et d'avortement sont des éléments de sécurité ajou
     \label{fig:verification_block}
 \end{figure}
 
-On peut voir une intéraction directe entre le bloc de séquence principale et le bloc d'avortement. Cela est du à la nécessité d'arrêter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste en attente de validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
+On peut voir une interaction directe entre le bloc de séquence principal et le bloc d'avortement. Cela est dû à la nécessité d'arrêter la séquence principale si jamais la pièce n'est pas dans les pinces du robot au moment de la vérification. En amont, un bloc logique \textbf{ET} permet de prendre le signal de détection de pièce et le signal de validation de position venant du bloc du robot pour faire la vérification. Le robot reste en attente de validation pendant 5 secondes. Si la validation n'est pas faite, le robot retourne en position de départ et la séquence est avortée. Si la validation est faite, le robot continue sa séquence normalement.
 
 \subsection{Programmation des mouvements}
 
@@ -353,6 +351,6 @@ Le bloc du robot interprète alors ce message et exécute la séquence de mouvem
     \label{fig:payload_block}
 \end{figure}
 
-Dans ce cas, la liste des mouvements est données en premier sous forme de positions articulaires. Ensuite, les chiffres correspondent au moment ou chaque position doit être atteinte. Cette approche permet de contrôler précisément le temps total de la séquence mais rend toute modification compliquée. En effet, si l'on souhaite modifier la durée d'un mouvement, il faut recalculer tous les mouvements suivants pour que le robot arrive à la bonne position au bon moment. Cela peut être un inconvénient si l'on souhaite faire des modifications fréquentes ou pendant la phase de test. Néanmoins, dans une mise à jour récente, la possibilité de modifier la durée de chaque mouvement indépendament des autres a été ajoutée.
+Dans ce cas, la liste des mouvements est donnée en premier sous forme de positions articulaires. Ensuite, les chiffres correspondent au moment ou chaque position doit être atteinte. Cette approche permet de contrôler précisément le temps total de la séquence mais rend toute modification compliquée. En effet, si l'on souhaite modifier la durée d'un mouvement, il faut recalculer tous les mouvements suivants pour que le robot arrive à la bonne position au bon moment. Cela peut être un inconvénient si l'on souhaite faire des modifications fréquentes ou pendant la phase de test. Néanmoins, dans une mise à jour récente, la possibilité de modifier la durée de chaque mouvement indépendament des autres a été ajoutée.
 
-Il est aussi possible de donner des points dans l'espace avec une orientation plutôt qu'une configuration articulaire fixe. Cette possibilité est plus simple à mettre en place mais est utile pour des positions et mouvements moins exigeants que ceux programmés dans le projet. Le bras robot possédant deux axes pouvants tourner à plus que 360 degrés, il se retrouvais régulièrement dans des situations ou les axes étaients proche des limites de leur rotation. Cela rendait le robot imprévisible et menais à des erreurs aléatoires qui bloquaient le système.
+Il est aussi possible de donner des points dans l'espace avec une orientation plutôt qu'une configuration articulaire fixe. Cette possibilité est plus simple à mettre en place mais est utile pour des positions et mouvements moins exigeants que ceux programmés dans le projet. Le bras robot possédant deux axes pouvants tourner à plus que 360 degrés, il se retrouvais régulièrement dans des situations ou les axes étaients proches des limites de leur rotation. Cela rendait le robot imprévisible et menait à des erreurs aléatoires qui bloquaient le système.

@@ -1,7 +1,7 @@
 \chapter{Risques}
 \label{chap:risques}
 
-Après l'implémentation de la station de gravure laser intelligente, il est essentiel de procéder à une analyse des risques. Cette étape permet d'identifier les dangers potentiels liés à l'utilisation du robot et du laser dans cet environnement spécifique. Grâce à cette analyse, des mesures physiques et \gls{software} de prévention et de maîtrise des risques peuvent être mises en place.
+Après l'implémentation de la station de gravure laser intelligente, il est essentiel de procéder à une analyse des risques. Cette étape permet d'identifier les dangers potentiels liés à l'utilisation du robot et du laser dans l'environnement spécifique de ce projet. Grâce à cette analyse, des mesures physiques et \gls{software} de prévention et de maîtrise des risques peuvent être mises en place.
 
 \section{Analyse des risques}
 L'utilisation d'une station de gravure laser intelligente avec un bras robotisé en environnement public comporte plusieurs risques qu'il convient d'identifier, d'évaluer et de maîtriser. L'analyse suivante s'appuie sur le contexte du projet, les éléments \gls{hardware} et \gls{software} utilisés, ainsi que les objectifs de sécurité et de fiabilité.
@@ -49,9 +49,9 @@ Cette analyse permet de mettre en place des mesures de sécurité pour la statio
     \item \textbf{Pour le risque 2 (Pincement lors du mouvement)~:} Présence d'un opérateur formé lors des démonstrations publiques et limitation des accès à la zone robotisée.
     \item \textbf{Pour le risque 3 (Mauvaise préhension de la pièce)~:} Ajout d'une vérification de prise de pièce via une caméra et validation logicielle de la détection de pièce.
     \item \textbf{Pour le risque 4 (Mouvement imprévu suite à une erreur logicielle)~:} Surveillance logicielle de la synchronisation robot/laser et gestion des erreurs critiques.
-    \item \textbf{Pour le risque 5 (Défaillance du système de sécurité)~:} Activation du laser uniquement lorsque le robot est en position sécurisée et la zone libre, et ajout d'un arrêt d'urgence.
+    \item \textbf{Pour le risque 5 (Défaillance du système de sécurité)~:} Activation du laser uniquement lorsque le robot est en position sécurisée et la zone libre. Mise en place d'un bouton d'arrêt d'urgence.
 \end{itemize}
 
 Ces mesures permettent de réduire significativement les risques identifiés, en garantissant un fonctionnement sécurisé et fiable de la station de gravure laser intelligente.
 
-L'ajout de ces sécurités a été fait au fur et à mesure du développement du projet. L'ajout de la verification de la prise de pièce via une caméra a été implémenté en dernier suite à une réflexion sur les potentielles améliorations et fiabilisations du système. En effet, la vérification de la prise de pièce permet de s'assurer que le robot a bien saisi la pièce avant de se déplacer vers la zone de gravure, réduisant ainsi les risques que la graveuse laser active le laser dans le vide.
+L'ajout de ces sécurités a été fait au fur et à mesure du développement du projet. L'ajout de la vérification de la prise de pièce via une caméra a été implémenté en dernier suite à une réflexion sur les potentielles améliorations et fiabilisations du système. En effet, la vérification de la prise de pièce permet de s'assurer que le robot a bien saisi la pièce avant de se déplacer vers la zone de gravure, réduisant ainsi les risques que la graveuse active le laser dans le vide.
